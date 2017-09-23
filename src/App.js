@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
-import ReactAudioPlayer from 'react-audio-player';
 import 'whatwg-fetch';
 
 class Atom extends Component {
@@ -50,7 +49,9 @@ class Column extends Component {
 class App extends Component {
   render() {
     return (
-      <Game/>
+      <MuiThemeProvider>
+        <Game/>
+      </MuiThemeProvider>
     );
   }
 }
@@ -71,7 +72,7 @@ class Game extends Component {
   render() {
     return (
       <div>
-        <ReactAudioPlayer
+        <audio
           ref={(element) => {this.player = element;}}
           controls
         />
@@ -83,10 +84,10 @@ class Game extends Component {
     );
   }
   jumpTo(time) {
-    this.player.audioEl.currentTime = time;
+    this.player.currentTime = time;
   }
   componentDidMount() {
-    this.player.audioEl.volume = 0.1;
+    this.player.volume = 0.1;
     fetch('./config.json')
       .then((res) => {
         return res.json();
@@ -102,7 +103,7 @@ class Game extends Component {
   }
   loadSong(idx) {
     console.assert(idx < this.mappings.length);
-    this.player.audioEl.src = this.mappings[idx].ogg;
+    this.player.src = this.mappings[idx].ogg;
     this.setState({
       song: idx,
       left: this.mappings[idx].left,
@@ -196,7 +197,7 @@ class Game extends Component {
     return mapping;
   }
   tick() {
-    let now = this.player.audioEl.currentTime;
+    let now = this.player.currentTime;
 
     const left = this.state.left
     const right = this.state.right;
