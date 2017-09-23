@@ -72,7 +72,6 @@ class Game extends Component {
     return (
       <div>
         <ReactAudioPlayer
-          src="natsu_no_owari_no_amaoto_ga.ogg"
           ref={(element) => {this.player = element;}}
           controls
         />
@@ -103,6 +102,7 @@ class Game extends Component {
   }
   loadSong(idx) {
     console.assert(idx < this.mappings.length);
+    this.player.audioEl.src = this.mappings[idx].ogg;
     this.setState({
       song: idx,
       left: this.mappings[idx].left,
