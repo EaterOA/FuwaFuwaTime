@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 import ReactAudioPlayer from 'react-audio-player';
@@ -12,6 +11,7 @@ class Atom extends Component {
   render() {
     return (
       <div
+        onClick={this.props.jump}
         className={"atom " + this.props.type + " " + (this.props.active ? "active" : "")}
         >
           {this.props.text}
@@ -30,6 +30,7 @@ class Column extends Component {
       } else {
         return (
           <Atom
+            jump={() => this.props.jumpTo(m.range[0])}
             key={idx}
             text={m.text}
             type={m.type}
@@ -60,6 +61,7 @@ class Game extends Component {
     this.player = null;
     this.tick = this.tick.bind(this);
     this.loadSong = this.loadSong.bind(this);
+    this.jumpTo = this.jumpTo.bind(this);
     this.mappings = [];
     this.state = {
       left: [],
@@ -75,11 +77,14 @@ class Game extends Component {
           controls
         />
         <div id="callguide">
-          <Column id="left" mapping={this.state.left}/>
-          <Column id="right" mapping={this.state.right}/>
+          <Column id="left" jumpTo={this.jumpTo} mapping={this.state.left}/>
+          <Column id="right" jumpTo={this.jumpTo} mapping={this.state.right}/>
         </div>
       </div>
     );
+  }
+  jumpTo(time) {
+    this.player.audioEl.currentTime = time;
   }
   componentDidMount() {
     this.player.audioEl.volume = 0.1;
