@@ -1,0 +1,42 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+#callguide {
+  padding: 15px 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.column {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+#left {
+  border-right: 2px solid #cccccc;
+}
+
+.atom {
+  display: inline-block;
+  color: #3d3d3d;
+  transition: all 0.5s ease 0s;
+}
+.atom.active {
+  transition: all 0.2s ease 0s;
+}
+.atom.lyrics.active {
+  text-shadow: 3px 0px 3px #c4c4c4,
+               0px 3px 3px #c4c4c4;
+}
+.atom.calls {
+  font-weight: 600;
+  color: #e24400;
+}
+.atom.calls.active {
+  text-shadow: 3px 0px 3px #ffb293,
+               0px 3px 3px #ffb293;
+}
