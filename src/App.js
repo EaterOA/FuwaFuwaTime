@@ -40,7 +40,9 @@ class Column extends Component {
     });
     return (
       <div id={this.props.id} className="column">
-        { children }
+        <div className="column-inner">
+          { children }
+        </div>
       </div>
     )
   }
@@ -71,8 +73,9 @@ class Game extends Component {
   }
   render() {
     return (
-      <div>
+      <div id="game">
         <audio
+          id="player"
           ref={(element) => {this.player = element;}}
           controls
         />
