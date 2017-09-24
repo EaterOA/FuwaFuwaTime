@@ -123,6 +123,7 @@ class SongMenu extends Component {
   render() {
     return (
       <IconMenu
+        touchTapCloseDelay={0}
         iconButtonElement={<IconButton><MenuIcon /></IconButton>}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
@@ -133,7 +134,7 @@ class SongMenu extends Component {
               <MenuItem
                 key={song.id}
                 primaryText={song.name}
-                onClick={() => this.props.loadSong(song.id)}
+                onClick={() => this.props.songClick(song.id)}
               />
             );
           })
@@ -160,7 +161,8 @@ class Game extends Component {
     this.player = null;
     this.tick = this.tick.bind(this);
     this.nextFrame = this.nextFrame.bind(this);
-    this.loadSong = this.loadSong.bind(this);
+    this.songClick = this.songClick.bind(this);
+    this.loadSongFromHash = this.loadSongFromHash.bind(this);
     this.changeVolume = this.changeVolume.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
@@ -189,7 +191,7 @@ class Game extends Component {
         iconElementLeft={
           <SongMenu
             songs={this.mappings}
-            loadSong={this.loadSong}
+            songClick={this.songClick}
           />
         }
         iconElementRight={
@@ -236,20 +238,44 @@ class Game extends Component {
         return res.json();
       })
       .then((json) => {
-        this.mappings = json.map(this.parseMapping);
-        this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
-        if (this.mappings.length > 0) {
-          this.loadSong(this.mappings[0].id);
-        }
-        window.requestAnimationFrame(this.nextFrame);
+        this.initialize(json);
       })
       .catch((ex) => {
         console.warn('Unable to load config', ex);
       });
   }
-  loadSong(id) {
-    let mapping = this.mappings.find((element) => element.id === id);
-    console.assert(mapping != null);
+  initialize(config) {
+    // transform mappings
+    this.mappings = config.map(this.parseMapping);
+    this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
+
+    // load
+    this.loadSongFromHash();
+
+    // events
+    window.onhashchange = this.loadSongFromHash;
+    window.requestAnimationFrame(this.nextFrame);
+  }
+  songClick(id) {
+    window.location.hash = id;
+    this.loadSongFromHash();
+  }
+  loadSongFromHash() {
+    let songID = window.location.hash.slice(1).split('?')[0];
+
+    // look for the song with that id
+    let mapping = this.mappings.find((element) => element.id === songID);
+
+    if (mapping != null) {
+      // load it if found
+      this.loadSong(mapping);
+
+    } else if (this.mappings.length > 0) {
+      // otherwise, just load first song
+      this.loadSong(this.mappings[0]);
+    }
+  }
+  loadSong(mapping) {
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
