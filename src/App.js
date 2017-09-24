@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import DoneIcon from 'material-ui/svg-icons/action/done';
+import BlockIcon from 'material-ui/svg-icons/content/block';
 import InfoIcon from 'material-ui/svg-icons/action/info';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import MenuItem from 'material-ui/MenuItem';
@@ -77,20 +79,21 @@ class AboutButton extends Component {
 };
 AboutButton.muiName = 'IconButton';
 
-class SettingsMenu extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.enabledCallSFX !== nextProps.enabledCallSFX;
-  }
+class SettingsMenu extends PureComponent {
   render() {
     return (
       <IconMenu
+        touchTapCloseDelay={0}
         iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
           <MenuItem
             primaryText="Call SFX"
-            checked={this.props.enabledCallSFX}
+            rightIcon={
+              this.props.callSFX ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={this.props.handlers.callSFX}
           />
       </IconMenu>
     );
@@ -144,9 +147,15 @@ class Game extends Component {
     this.loadSong = this.loadSong.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.mappings = [];
+    this.settingsHandlers = {
+      callSFX: this.toggleCallSFX.bind(this),
+    }
     this.state = {
       songName: "",
       songId: "",
+      settings: {
+        callSFX: false,
+      },
       left: [],
       right: [],
     };
@@ -164,7 +173,10 @@ class Game extends Component {
         }
         iconElementRight={
           <div>
-            <SettingsMenu />
+            <SettingsMenu
+              {...this.state.settings}
+              handlers={this.settingsHandlers}
+            />
             <AboutButton />
           </div>
         }
@@ -181,6 +193,13 @@ class Game extends Component {
         </div>
       </div>
     );
+  }
+  toggleCallSFX() {
+    const settings = this.state.settings;
+    settings.callSFX = !settings.callSFX;
+    this.setState({
+      settings : settings
+    });
   }
   jumpTo(time) {
     this.player.currentTime = time;
