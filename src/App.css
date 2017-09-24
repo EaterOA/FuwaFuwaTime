@@ -8,9 +8,15 @@ body {
   align-items: center;
 }
 
+#songName {
+  margin: 20px;
+  font-size: 24px;
+}
+
 #player {
   max-width: 750px;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 #callguide {

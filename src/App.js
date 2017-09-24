@@ -169,7 +169,7 @@ class Game extends Component {
           </div>
         }
       />
-        <div id="song">{this.state.songName}</div>
+        <div id="songName">{this.state.songName}</div>
         <audio
           id="player"
           ref={(element) => {this.player = element;}}
