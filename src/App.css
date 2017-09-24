@@ -1,21 +1,19 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
+  margin: 0px;
 }
 
 #game {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 #player {
   max-width: 750px;
   width: 100%;
-  margin: auto;
 }
 
 #callguide {
-  margin: auto;
   max-width: 1250px;
   padding: 15px 5px;
   display: flex;

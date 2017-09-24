@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import InfoIcon from 'material-ui/svg-icons/action/info';
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
+import MenuItem from 'material-ui/MenuItem';
 import './App.css';
 import 'whatwg-fetch';
 
@@ -48,6 +55,68 @@ class Column extends Component {
   }
 }
 
+class AboutButton extends Component {
+  render() {
+    return (
+      <IconButton
+        {...this.props}
+      >
+        <InfoIcon/>
+      </IconButton>
+    );
+  }
+};
+AboutButton.muiName = 'IconButton';
+
+class SettingsMenu extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.enabledCallSFX !== nextProps.enabledCallSFX;
+  }
+  render() {
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
+        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+      >
+          <MenuItem
+            primaryText="Call SFX"
+            checked={this.props.enabledCallSFX}
+          />
+      </IconMenu>
+    );
+  }
+};
+SettingsMenu.muiName = 'IconMenu';
+
+class SongMenu extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.songs.length !== nextProps.songs.length;
+  }
+  render() {
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><MenuIcon /></IconButton>}
+        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+      >
+        {
+          this.props.songs.map((song) => {
+            return (
+              <MenuItem
+                key={song.id}
+                primaryText={song.name}
+                onClick={() => this.props.loadSong(song.id)}
+              />
+            );
+          })
+        }
+      </IconMenu>
+    );
+  }
+};
+SongMenu.muiName = 'IconMenu';
+
 class App extends Component {
   render() {
     return (
@@ -67,6 +136,7 @@ class Game extends Component {
     this.jumpTo = this.jumpTo.bind(this);
     this.mappings = [];
     this.state = {
+      songName: "",
       left: [],
       right: [],
     };
@@ -74,6 +144,22 @@ class Game extends Component {
   render() {
     return (
       <div id="game">
+      <AppBar
+        title="Interactive Callguide"
+        iconElementLeft={
+          <SongMenu
+            songs={this.mappings}
+            loadSong={this.loadSong}
+          />
+        }
+        iconElementRight={
+          <div>
+            <SettingsMenu />
+            <AboutButton />
+          </div>
+        }
+      />
+        <div id="song">{this.state.songName}</div>
         <audio
           id="player"
           ref={(element) => {this.player = element;}}
@@ -97,20 +183,23 @@ class Game extends Component {
       })
       .then((json) => {
         this.mappings = json.map(this.parseMapping);
-        this.loadSong(0);
+        if (this.mappings.length > 0) {
+          this.loadSong(this.mappings[0].id);
+        }
       })
       .catch((ex) => {
         console.warn('Unable to load config', ex);
       });
     window.requestAnimationFrame(this.tick);
   }
-  loadSong(idx) {
-    console.assert(idx < this.mappings.length);
-    this.player.src = this.mappings[idx].ogg;
+  loadSong(id) {
+    let mapping = this.mappings.find((element) => element.id === id);
+    console.assert(mapping != null);
+    this.player.src = mapping.ogg;
     this.setState({
-      song: idx,
-      left: this.mappings[idx].left,
-      right: this.mappings[idx].right,
+      songName: mapping.name,
+      left: mapping.left,
+      right: mapping.right,
     });
   }
   parseMapping(song) {
