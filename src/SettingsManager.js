@@ -2,6 +2,7 @@ class SettingsManager {
   constructor() {
     this.settings = {
       callSFX: false,
+      volume: 0.5,
     };
     this.changeSetting = this.changeSetting.bind(this);
   }
@@ -11,6 +12,11 @@ class SettingsManager {
     if (callSFXSetting != null) {
       this.settings.callSFX = callSFXSetting === 'true';
     }
+
+    let volumeSetting = localStorage.volume;
+    if (volumeSetting != null) {
+      this.settings.volume = parseFloat(volumeSetting);
+    }
   }
 
   changeSetting(key, value=null) {
@@ -18,8 +24,12 @@ class SettingsManager {
       this.settings.callSFX = !this.settings.callSFX;
       localStorage.setItem('callSFX', this.settings.callSFX);
 
+    } else if (key === 'volume') {
+      this.settings.volume = value;
+      localStorage.setItem('volume', this.settings.volume);
+
     } else {
-      console.assert('unknown settings key ' + key);
+      console.assert(false, 'Unknown settings key ' + key);
     }
   }
 

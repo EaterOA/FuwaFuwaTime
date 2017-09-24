@@ -13,11 +13,9 @@ import './App.css';
 import 'whatwg-fetch';
 import SFXManager from './SFXManager.js';
 import SettingsManager from './SettingsManager.js';
+import AudioPlayer from './AudioPlayer.js';
 
-class Atom extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.active !== nextProps.active;
-  }
+class Atom extends PureComponent {
   render() {
     return (
       <div
@@ -68,7 +66,7 @@ class Column extends Component {
   }
 }
 
-class AboutButton extends Component {
+class AboutButton extends PureComponent {
   render() {
     return (
       <IconButton
@@ -95,7 +93,7 @@ class SettingsMenu extends PureComponent {
             rightIcon={
               this.props.callSFX ? <DoneIcon/> : <BlockIcon/>
             }
-            onClick={() => {this.props.handler('callSFX')}}
+            onClick={() => {this.props.changeSetting('callSFX')}}
           />
       </IconMenu>
     );
@@ -147,15 +145,20 @@ class Game extends Component {
     this.player = null;
     this.tick = this.tick.bind(this);
     this.loadSong = this.loadSong.bind(this);
+    this.changeVolume = this.changeVolume.bind(this);
+    this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.callSFX = new SFXManager('call.wav', 3);
     this.settingsManager = new SettingsManager();
     this.settingsManager.loadSettings();
+    this.defaultVolume = this.settingsManager.settings.volume;
     this.mappings = [];
     this.state = {
       songName: "",
       songId: "",
       settings: this.settingsManager.settings,
+      ogg: null,
+      mp3: null,
       left: [],
       right: [],
     };
@@ -175,17 +178,19 @@ class Game extends Component {
           <div>
             <SettingsMenu
               {...this.state.settings}
-              handler={this.settingsManager.changeSetting}
+              changeSetting={this.changeSetting}
             />
             <AboutButton />
           </div>
         }
       />
         <div id="songName">{this.state.songName}</div>
-        <audio
-          id="player"
-          ref={(element) => {this.player = element;}}
-          controls
+        <AudioPlayer
+          ref={(element) => {this.player = element}}
+          ogg={this.state.ogg}
+          mp3={this.state.mp3}
+          defaultVolume={this.defaultVolume}
+          onVolumeChange={this.changeVolume}
         />
         <div id="callguide">
           <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left}/>
@@ -194,11 +199,19 @@ class Game extends Component {
       </div>
     );
   }
+  changeVolume(volume) {
+    this.changeSetting('volume', volume);
+  }
+  changeSetting(key, value=null) {
+    this.settingsManager.changeSetting(key, value);
+    this.setState({
+      settings: this.settingsManager.settings,
+    });
+  }
   jumpTo(time) {
-    this.player.currentTime = time;
+    this.player.jumpTo(time);
   }
   componentDidMount() {
-    this.player.volume = 0.1;
     fetch('./config.json')
       .then((res) => {
         return res.json();
@@ -218,12 +231,13 @@ class Game extends Component {
   loadSong(id) {
     let mapping = this.mappings.find((element) => element.id === id);
     console.assert(mapping != null);
-    this.player.src = mapping.ogg;
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
       left: mapping.left,
       right: mapping.right,
+      ogg: mapping.ogg,
+      mp3: mapping.mp3,
     });
   }
   parseMapping(song) {
@@ -314,7 +328,7 @@ class Game extends Component {
     return mapping;
   }
   tick() {
-    let now = this.player.currentTime;
+    let now = this.player.getCurrentTime();
 
     let playCall = false;
     const playCallCriteria = (mapping) => {
