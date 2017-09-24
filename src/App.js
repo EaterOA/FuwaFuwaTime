@@ -18,7 +18,7 @@ class Atom extends Component {
     return (
       <div
         onClick={this.props.jump}
-        className={"atom " + this.props.type + " " + (this.props.active ? "active" : "")}
+        className={"atom " + this.props.src + " " + (this.props.active ? "active" : "")}
         >
           {this.props.text}
       </div>
@@ -32,17 +32,25 @@ class Column extends Component {
       if (m.type === "newline") {
         return <br key={idx} />
       } else if (m.type === "text") {
-        return m.text;
-      } else {
+        if (m.text === " ") {
+          return m.text;
+        } else {
+          return <span key={idx} className={"text " + m.src}>{m.text}</span>
+        }
+      } else if (m.type === "atom") {
         return (
           <Atom
             jump={() => this.props.jumpTo(m.range[0])}
             key={idx}
+            src={m.src}
             text={m.text}
             type={m.type}
             active={m.active}
           />
         );
+      } else {
+        console.assert(false, "Unknown type " + m.type);
+        return null;
       }
     });
     return (
@@ -231,7 +239,7 @@ class Game extends Component {
     let refs = { calls: 0, lyrics: 0 };
     for (let i = 0; i < tokens.length;) {
       if (tokens[i].type === "text") {
-        stream.push({type:"text", text: tokens[i].str, push:push});
+        stream.push({type:"text", text: tokens[i].str, src: (callMode ? 'calls' : 'lyrics'), push:push});
         push = null;
         i += 1;
       } else if (tokens[i].type === "newline") {
@@ -273,7 +281,8 @@ class Game extends Component {
           break;
         }
         stream.push({
-          type: together ? 'calls' : src,
+          type: 'atom',
+          src: (together ? 'calls' : src),
           text: text,
           range: timings[src][refs[src]],
           push: push,
