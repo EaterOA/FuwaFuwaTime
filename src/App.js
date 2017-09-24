@@ -85,6 +85,7 @@ class AboutButton extends PureComponent {
   render() {
     return (
       <IconButton
+        iconStyle={{color:'white'}}
         {...this.props}
       >
         <InfoIcon/>
@@ -100,6 +101,7 @@ class SettingsMenu extends PureComponent {
       <IconMenu
         touchTapCloseDelay={0}
         iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
+        iconStyle={{backgroundColor: 'transparent', color:'white'}}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
@@ -204,7 +206,7 @@ class Game extends Component {
           </div>
         }
       />
-        <div id="songName">{this.state.songName}</div>
+        <div id="song-name">{this.state.songName}</div>
         <AudioPlayer
           ref={(element) => {this.player = element}}
           ogg={this.state.ogg}

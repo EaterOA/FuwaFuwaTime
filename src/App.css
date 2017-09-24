@@ -8,18 +8,21 @@ body {
   align-items: center;
 }
 
-#songName {
-  margin: 20px;
-  font-size: 24px;
+#song-name {
+  margin: 30px 0px;
+  font-size: 30px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #player {
   max-width: 750px;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 #callguide {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1em;
   max-width: 1250px;
   padding: 15px 5px;
   display: flex;
@@ -62,6 +65,7 @@ body {
                0px 3px 3px #c4c4c4;
 }
 .calls {
+  font-size: 0.9em;
   font-weight: 600;
   color: #e24400;
 }
