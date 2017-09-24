@@ -4,6 +4,7 @@ class SettingsManager {
       callSFX: false,
       volume: 0.5,
     };
+    this.loadSettings();
     this.changeSetting = this.changeSetting.bind(this);
   }
 
