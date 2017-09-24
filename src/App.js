@@ -29,6 +29,20 @@ class Atom extends PureComponent {
 }
 
 class Column extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.songId !== nextProps.songId) {
+      return true;
+    }
+    if (this.props.activeMap.size !== nextProps.activeMap.size) {
+      return true;
+    }
+    for (let [key, value] of this.props.activeMap.entries()) {
+      if (nextProps.activeMap.get(key) !== value) {
+        return true;
+      }
+    }
+    return false;
+  }
   render() {
     const id = this.props.songId;
     let children = this.props.mapping.map((m, idx) => {
@@ -48,7 +62,7 @@ class Column extends Component {
             src={m.src}
             text={m.text}
             type={m.type}
-            active={m.active}
+            active={this.props.activeMap.get(idx)}
           />
         );
       } else {
@@ -144,6 +158,7 @@ class Game extends Component {
     super(props);
     this.player = null;
     this.tick = this.tick.bind(this);
+    this.nextFrame = this.nextFrame.bind(this);
     this.loadSong = this.loadSong.bind(this);
     this.changeVolume = this.changeVolume.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
@@ -161,6 +176,8 @@ class Game extends Component {
       mp3: null,
       left: [],
       right: [],
+      leftActiveMap: new Map(),
+      rightActiveMap: new Map(),
     };
   }
   render() {
@@ -191,10 +208,11 @@ class Game extends Component {
           mp3={this.state.mp3}
           defaultVolume={this.defaultVolume}
           onVolumeChange={this.changeVolume}
+          onTimeUpdate={this.tick}
         />
         <div id="callguide">
-          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left}/>
-          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right}/>
+          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeMap={this.state.leftActiveMap}/>
+          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeMap={this.state.rightActiveMap}/>
         </div>
       </div>
     );
@@ -226,7 +244,7 @@ class Game extends Component {
       .catch((ex) => {
         console.warn('Unable to load config', ex);
       });
-    window.requestAnimationFrame(this.tick);
+    window.requestAnimationFrame(this.nextFrame);
   }
   loadSong(id) {
     let mapping = this.mappings.find((element) => element.id === id);
@@ -234,10 +252,12 @@ class Game extends Component {
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
-      left: mapping.left,
-      right: mapping.right,
       ogg: mapping.ogg,
       mp3: mapping.mp3,
+      left: mapping.left,
+      right: mapping.right,
+      leftActiveMap: this.getActiveMap(0, mapping.left),
+      rightActiveMap: this.getActiveMap(0, mapping.right),
     });
   }
   parseMapping(song) {
@@ -327,9 +347,13 @@ class Game extends Component {
     }
     return mapping;
   }
-  tick() {
-    let now = this.player.getCurrentTime();
-
+  nextFrame() {
+    if (this.player.playing()) {
+      this.tick(this.player.getCurrentTime());
+    }
+    window.requestAnimationFrame(this.nextFrame);
+  }
+  tick(time) {
     let playCall = false;
     const playCallCriteria = (mapping) => {
       return mapping.src === "calls" && mapping.active === true;
@@ -337,32 +361,33 @@ class Game extends Component {
     const left = this.state.left
     const right = this.state.right;
     if (left.length > 0 || right.length > 0) {
-      const changedLeft = this.updateActive(now, left);
-      const changedRight = this.updateActive(now, right);
+      const leftActiveMap = this.getActiveMap(time, left);
+      const rightActiveMap = this.getActiveMap(time, right);
+      /*
       if (this.state.settings.callSFX) {
         playCall = playCall ||
                    changedLeft.find(playCallCriteria) ||
                    changedRight.find(playCallCriteria);
       }
-      this.setState({ left: left, right: right });
+      */
+      this.setState({
+        leftActiveMap: leftActiveMap,
+        rightActiveMap: rightActiveMap,
+      });
     }
     if (playCall) {
       this.callSFX.play();
     }
-    window.requestAnimationFrame(this.tick);
   }
-  updateActive(time, mapping) {
-    const changed = [];
-    for (let m of mapping) {
+  getActiveMap(time, mapping) {
+    let activeMap = new Map();
+    mapping.forEach((m, idx) => {
       if (m.range != null) {
-        const prev = m.active;
-        m.active = (m.range[0] <= time && time < m.range[1]);
-        if (prev !== m.active) {
-          changed.push(m);
-        }
+        const isActive = (m.range[0] <= time && time < m.range[1]);
+        activeMap.set(idx, isActive);
       }
-    }
-    return changed;
+    });
+    return activeMap;
   }
 }
 

@@ -22,6 +22,9 @@ class AudioPlayer extends PureComponent {
     this.audioEl.addEventListener('volumechange', () => {
       this.props.onVolumeChange(this.audioEl.volume);
     });
+    this.audioEl.addEventListener('timeupdate', () => {
+      this.props.onTimeUpdate(this.audioEl.currentTime);
+    });
   }
   componentDidUpdate() {
     this.audioEl.load();
@@ -31,6 +34,9 @@ class AudioPlayer extends PureComponent {
   }
   jumpTo(time) {
     this.audioEl.currentTime = time;
+  }
+  playing() {
+    return !this.audioEl.paused && !this.audioEl.ended && this.audioEl.currentTime > 0;
   }
 }
 
