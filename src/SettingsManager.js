@@ -1,7 +1,7 @@
 class SettingsManager {
   constructor() {
     this.settings = {
-      callSFX: false,
+      callSFX: true,
       volume: 0.5,
     };
     this.loadSettings();
