@@ -45,7 +45,7 @@ class Game extends Component {
     this.changeVolume = this.changeVolume.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
-    this.callSFX = new SFXManager('call.wav', 3);
+    this.callSFX = new SFXManager('sound/call.wav', 3);
     this.settingsManager = new SettingsManager();
     this.layoutParser = new LayoutParser();
     this.defaultVolume = this.settingsManager.settings.volume;
