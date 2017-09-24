@@ -11,6 +11,7 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import MenuItem from 'material-ui/MenuItem';
 import './App.css';
 import 'whatwg-fetch';
+import SFXManager from './SFXManager.js';
 
 class Atom extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -146,6 +147,7 @@ class Game extends Component {
     this.tick = this.tick.bind(this);
     this.loadSong = this.loadSong.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
+    this.callSFX = new SFXManager('call.wav', 3);
     this.mappings = [];
     this.settingsHandlers = {
       callSFX: this.toggleCallSFX.bind(this),
@@ -323,21 +325,39 @@ class Game extends Component {
   tick() {
     let now = this.player.currentTime;
 
+    let playCall = false;
+    const playCallCriteria = (mapping) => {
+      return mapping.src === "calls" && mapping.active === true;
+    };
     const left = this.state.left
     const right = this.state.right;
     if (left.length > 0 || right.length > 0) {
-      this.updateActive(now, left);
-      this.updateActive(now, right);
+      const changedLeft = this.updateActive(now, left);
+      const changedRight = this.updateActive(now, right);
+      if (this.state.settings.callSFX) {
+        playCall = playCall ||
+                   changedLeft.find(playCallCriteria) ||
+                   changedRight.find(playCallCriteria);
+      }
       this.setState({ left: left, right: right });
+    }
+    if (playCall) {
+      this.callSFX.play();
     }
     window.requestAnimationFrame(this.tick);
   }
   updateActive(time, mapping) {
+    const changed = [];
     for (let m of mapping) {
       if (m.range != null) {
+        const prev = m.active;
         m.active = (m.range[0] <= time && time < m.range[1]);
+        if (prev !== m.active) {
+          changed.push(m);
+        }
       }
     }
+    return changed;
   }
 }
 
