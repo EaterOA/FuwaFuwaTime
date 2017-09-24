@@ -52,13 +52,14 @@ class Column extends Component {
         if (m.text === " ") {
           return m.text;
         } else {
-          return <span key={id+idx} className={"text " + m.src}>{m.text}</span>
+          return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text}</span>
         }
       } else if (m.type === "atom") {
         return (
           <Atom
-            jump={() => this.props.jumpTo(m.range[0])}
             key={id+idx}
+            jump={() => this.props.jumpTo(m.range[0])}
+            style={{marginLeft: m.push}}
             src={m.src}
             text={m.text}
             type={m.type}
