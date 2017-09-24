@@ -25,6 +25,7 @@ class AudioPlayer extends PureComponent {
     this.audioEl.addEventListener('timeupdate', () => {
       this.props.onTimeUpdate(this.audioEl.currentTime);
     });
+    this.audioEl.controlsList = 'nodownload';
   }
   componentDidUpdate() {
     this.audioEl.load();
