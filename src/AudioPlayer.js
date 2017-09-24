@@ -32,11 +32,21 @@ class AudioPlayer extends PureComponent {
   getCurrentTime() {
     return this.audioEl.currentTime;
   }
+  getDuration() {
+    return this.audioEl.duration;
+  }
   jumpTo(time) {
     this.audioEl.currentTime = time;
   }
   playing() {
     return !this.audioEl.paused && !this.audioEl.ended && this.audioEl.currentTime > 0;
+  }
+  toggle() {
+    if (this.playing()) {
+      this.audioEl.pause();
+    } else {
+      this.audioEl.play();
+    }
   }
 }
 

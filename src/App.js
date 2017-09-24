@@ -36,7 +36,8 @@ class App extends Component {
 class Game extends Component {
   constructor(props) {
     super(props);
-    this.player = null;
+
+    // binds - do it once in constructor so their refs never change
     this.tick = this.tick.bind(this);
     this.toggleAbout = this.toggleAbout.bind(this);
     this.nextFrame = this.nextFrame.bind(this);
@@ -45,11 +46,17 @@ class Game extends Component {
     this.changeVolume = this.changeVolume.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
+    this.keydown = this.keydown.bind(this);
+
+    // non-rendered state
+    this.player = null;
     this.callSFX = new SFXManager('sound/call.wav', 3);
     this.settingsManager = new SettingsManager();
     this.layoutParser = new LayoutParser();
-    this.defaultVolume = this.settingsManager.settings.volume;
     this.mappings = [];
+    this.defaultVolume = this.settingsManager.settings.volume;
+
+    // initial render state
     this.state = {
       aboutOpened: false,
       songName: "",
@@ -87,7 +94,11 @@ class Game extends Component {
           </div>
         }
       />
-      <div id="game" className="game" style={{ paddingTop: 64 }}>
+      <div
+        id="game"
+        className="game"
+        style={{ paddingTop: 64 }}
+      >
         <AboutDrawer
           open={this.state.aboutOpened}
           toggle={this.toggleAbout}
@@ -133,6 +144,7 @@ class Game extends Component {
     // events
     window.onhashchange = this.loadSongFromHash;
     window.requestAnimationFrame(this.nextFrame);
+    document.onkeydown = this.keydown;
 
     // open about drawer
     this.setState({
@@ -251,6 +263,26 @@ class Game extends Component {
 
   jumpTo(time) {
     this.player.jumpTo(time);
+  }
+
+  keydown(e) {
+    // space - toggle play
+    if (e.keyCode === 32) {
+      this.player.toggle();
+      e.preventDefault();
+
+    // left - rewind 2 seconds
+    } else if (e.keyCode === 37) {
+      const seek = Math.max(0, this.player.getCurrentTime() - 2);
+      this.player.jumpTo(seek);
+      e.preventDefault();
+
+    // right - forward 2 seconds
+    } else if (e.keyCode === 39) {
+      const seek = Math.min(this.player.getDuration(), this.player.getCurrentTime() + 2);
+      this.player.jumpTo(seek);
+      e.preventDefault();
+    }
   }
 }
 
