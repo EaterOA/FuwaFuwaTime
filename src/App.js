@@ -12,6 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 import './App.css';
 import 'whatwg-fetch';
 import SFXManager from './SFXManager.js';
+import SettingsManager from './SettingsManager.js';
 
 class Atom extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -94,7 +95,7 @@ class SettingsMenu extends PureComponent {
             rightIcon={
               this.props.callSFX ? <DoneIcon/> : <BlockIcon/>
             }
-            onClick={this.props.handlers.callSFX}
+            onClick={() => {this.props.handler('callSFX')}}
           />
       </IconMenu>
     );
@@ -148,16 +149,13 @@ class Game extends Component {
     this.loadSong = this.loadSong.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.callSFX = new SFXManager('call.wav', 3);
+    this.settingsManager = new SettingsManager();
+    this.settingsManager.loadSettings();
     this.mappings = [];
-    this.settingsHandlers = {
-      callSFX: this.toggleCallSFX.bind(this),
-    }
     this.state = {
       songName: "",
       songId: "",
-      settings: {
-        callSFX: false,
-      },
+      settings: this.settingsManager.settings,
       left: [],
       right: [],
     };
@@ -177,7 +175,7 @@ class Game extends Component {
           <div>
             <SettingsMenu
               {...this.state.settings}
-              handlers={this.settingsHandlers}
+              handler={this.settingsManager.changeSetting}
             />
             <AboutButton />
           </div>
@@ -195,13 +193,6 @@ class Game extends Component {
         </div>
       </div>
     );
-  }
-  toggleCallSFX() {
-    const settings = this.state.settings;
-    settings.callSFX = !settings.callSFX;
-    this.setState({
-      settings : settings
-    });
   }
   jumpTo(time) {
     this.player.currentTime = time;
