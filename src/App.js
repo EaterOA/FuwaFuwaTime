@@ -1,5 +1,6 @@
 import React, { PureComponent, Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -14,6 +15,14 @@ import 'whatwg-fetch';
 import SFXManager from './SFXManager.js';
 import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
+import AboutDrawer from './AboutDrawer.js';
+
+const muiTheme = getMuiTheme({
+  "palette": {
+    "primary1Color": "#64b5f6",
+    "textColor": "rgba(0, 34, 68, 1.00)",
+  }
+});
 
 class Atom extends PureComponent {
   render() {
@@ -150,7 +159,7 @@ SongMenu.muiName = 'IconMenu';
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <Game/>
       </MuiThemeProvider>
     );
@@ -162,6 +171,7 @@ class Game extends Component {
     super(props);
     this.player = null;
     this.tick = this.tick.bind(this);
+    this.toggleAbout = this.toggleAbout.bind(this);
     this.nextFrame = this.nextFrame.bind(this);
     this.songClick = this.songClick.bind(this);
     this.loadSongFromHash = this.loadSongFromHash.bind(this);
@@ -174,6 +184,7 @@ class Game extends Component {
     this.defaultVolume = this.settingsManager.settings.volume;
     this.mappings = [];
     this.state = {
+      aboutOpened: false,
       songName: "",
       songId: "",
       settings: this.settingsManager.settings,
@@ -186,10 +197,9 @@ class Game extends Component {
     };
   }
   render() {
-    return (
-      <div id="game">
+    return (<div>
       <AppBar
-        title="Interactive Callguide"
+        title="FuwaFuwaTime"
         iconElementLeft={
           <SongMenu
             songs={this.mappings}
@@ -202,10 +212,17 @@ class Game extends Component {
               {...this.state.settings}
               changeSetting={this.changeSetting}
             />
-            <AboutButton />
+            <AboutButton
+              onClick={this.toggleAbout}
+            />
           </div>
         }
       />
+      <div id="game" className="game">
+        <AboutDrawer
+          open={this.state.aboutOpened}
+          toggle={this.toggleAbout}
+        />
         <div id="song-name">{this.state.songName}</div>
         <AudioPlayer
           ref={(element) => {this.player = element}}
@@ -220,19 +237,7 @@ class Game extends Component {
           <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeMap={this.state.rightActiveMap}/>
         </div>
       </div>
-    );
-  }
-  changeVolume(volume) {
-    this.changeSetting('volume', volume);
-  }
-  changeSetting(key, value=null) {
-    this.settingsManager.changeSetting(key, value);
-    this.setState({
-      settings: this.settingsManager.settings,
-    });
-  }
-  jumpTo(time) {
-    this.player.jumpTo(time);
+    </div>);
   }
   componentDidMount() {
     fetch('./config.json')
@@ -257,10 +262,35 @@ class Game extends Component {
     // events
     window.onhashchange = this.loadSongFromHash;
     window.requestAnimationFrame(this.nextFrame);
+
+    // open about drawer
+    this.setState({
+      aboutOpened: true,
+    });
+  }
+  toggleAbout() {
+    this.setState({
+      aboutOpened : !this.state.aboutOpened
+    });
   }
   songClick(id) {
     window.location.hash = id;
     this.loadSongFromHash();
+    this.setState({
+      aboutOpened: false,
+    });
+  }
+  changeVolume(volume) {
+    this.changeSetting('volume', volume);
+  }
+  changeSetting(key, value=null) {
+    this.settingsManager.changeSetting(key, value);
+    this.setState({
+      settings: this.settingsManager.settings,
+    });
+  }
+  jumpTo(time) {
+    this.player.jumpTo(time);
   }
   loadSongFromHash() {
     let songID = window.location.hash.slice(1).split('?')[0];
@@ -278,6 +308,7 @@ class Game extends Component {
     }
   }
   loadSong(mapping) {
+    document.title = 'FuwaFuwaTime - ' + mapping.name;
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
