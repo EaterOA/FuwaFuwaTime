@@ -240,11 +240,11 @@ class Game extends Component {
         if (this.mappings.length > 0) {
           this.loadSong(this.mappings[0].id);
         }
+        window.requestAnimationFrame(this.nextFrame);
       })
       .catch((ex) => {
         console.warn('Unable to load config', ex);
       });
-    window.requestAnimationFrame(this.nextFrame);
   }
   loadSong(id) {
     let mapping = this.mappings.find((element) => element.id === id);
@@ -349,35 +349,25 @@ class Game extends Component {
   }
   nextFrame() {
     if (this.player.playing()) {
-      this.tick(this.player.getCurrentTime());
+      const time = this.player.getCurrentTime();
+      this.tick(time);
     }
     window.requestAnimationFrame(this.nextFrame);
   }
   tick(time) {
-    let playCall = false;
-    const playCallCriteria = (mapping) => {
-      return mapping.src === "calls" && mapping.active === true;
-    };
-    const left = this.state.left
-    const right = this.state.right;
-    if (left.length > 0 || right.length > 0) {
-      const leftActiveMap = this.getActiveMap(time, left);
-      const rightActiveMap = this.getActiveMap(time, right);
-      /*
-      if (this.state.settings.callSFX) {
-        playCall = playCall ||
-                   changedLeft.find(playCallCriteria) ||
-                   changedRight.find(playCallCriteria);
-      }
-      */
-      this.setState({
-        leftActiveMap: leftActiveMap,
-        rightActiveMap: rightActiveMap,
-      });
-    }
-    if (playCall) {
+    const leftActiveMap = this.getActiveMap(time, this.state.left);
+    const rightActiveMap = this.getActiveMap(time, this.state.right);
+
+    if (this.settingsManager.settings.callSFX &&
+        this.callActivated(leftActiveMap, rightActiveMap) &&
+        this.player.playing()) {
       this.callSFX.play();
     }
+
+    this.setState({
+      leftActiveMap: leftActiveMap,
+      rightActiveMap: rightActiveMap,
+    });
   }
   getActiveMap(time, mapping) {
     let activeMap = new Map();
@@ -388,6 +378,24 @@ class Game extends Component {
       }
     });
     return activeMap;
+  }
+  callActivated(leftActiveMap, rightActiveMap) {
+    const evaluateSide = (mapping, prevMap, nextMap) => {
+      for (let [key, value] of nextMap) {
+        if (value === true &&
+            prevMap.get(key) === false &&
+            mapping[key].src === 'calls') {
+          return true;
+        }
+      }
+      return false;
+    };
+    return evaluateSide(this.state.left,
+                        this.state.leftActiveMap,
+                        leftActiveMap) ||
+           evaluateSide(this.state.right,
+                        this.state.rightActiveMap,
+                        rightActiveMap);
   }
 }
 
