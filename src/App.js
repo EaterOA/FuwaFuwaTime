@@ -106,8 +106,8 @@ class SongMenu extends Component {
     return (
       <IconMenu
         iconButtonElement={<IconButton><MenuIcon /></IconButton>}
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       >
         {
           this.props.songs.map((song) => {
@@ -193,6 +193,7 @@ class Game extends Component {
       })
       .then((json) => {
         this.mappings = json.map(this.parseMapping);
+        this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
         if (this.mappings.length > 0) {
           this.loadSong(this.mappings[0].id);
         }
