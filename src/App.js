@@ -28,20 +28,21 @@ class Atom extends Component {
 
 class Column extends Component {
   render() {
+    const id = this.props.songId;
     let children = this.props.mapping.map((m, idx) => {
       if (m.type === "newline") {
-        return <br key={idx} />
+        return <br key={id+idx} />
       } else if (m.type === "text") {
         if (m.text === " ") {
           return m.text;
         } else {
-          return <span key={idx} className={"text " + m.src}>{m.text}</span>
+          return <span key={id+idx} className={"text " + m.src}>{m.text}</span>
         }
       } else if (m.type === "atom") {
         return (
           <Atom
             jump={() => this.props.jumpTo(m.range[0])}
-            key={idx}
+            key={id+idx}
             src={m.src}
             text={m.text}
             type={m.type}
@@ -145,6 +146,7 @@ class Game extends Component {
     this.mappings = [];
     this.state = {
       songName: "",
+      songId: "",
       left: [],
       right: [],
     };
@@ -174,8 +176,8 @@ class Game extends Component {
           controls
         />
         <div id="callguide">
-          <Column id="left" jumpTo={this.jumpTo} mapping={this.state.left}/>
-          <Column id="right" jumpTo={this.jumpTo} mapping={this.state.right}/>
+          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left}/>
+          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right}/>
         </div>
       </div>
     );
@@ -206,6 +208,7 @@ class Game extends Component {
     this.player.src = mapping.ogg;
     this.setState({
       songName: mapping.name,
+      songId: mapping.id,
       left: mapping.left,
       right: mapping.right,
     });
