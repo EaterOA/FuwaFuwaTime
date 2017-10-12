@@ -16,6 +16,8 @@ import LayoutParser from './LayoutParser.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
+import config from './config.json';
+
 const muiTheme = getMuiTheme({
   "palette": {
     "primary1Color": "#64b5f6",
@@ -121,19 +123,6 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    fetch('./config.json')
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        this.initialize(json);
-      })
-      .catch((ex) => {
-        console.warn('Unable to load config', ex);
-      });
-  }
-
-  initialize(config) {
     // parse mappings
     this.mappings = config.map(this.layoutParser.parseMapping);
     this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
