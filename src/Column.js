@@ -21,14 +21,13 @@ class Column extends Component {
   render() {
     const id = this.props.songId;
     let children = this.props.mapping.map((m, idx) => {
+
       if (m.type === "newline") {
         return <br key={id+idx} />
+
       } else if (m.type === "text") {
-        if (m.text === " ") {
-          return m.text;
-        } else {
-          return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text}</span>
-        }
+        return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text.replace(/ /g, '\u00a0')}</span>
+
       } else if (m.type === "atom") {
         return (
           <Atom
