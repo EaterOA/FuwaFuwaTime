@@ -68,8 +68,8 @@ class Game extends Component {
       mp3: null,
       left: [],
       right: [],
-      leftActiveMap: new Map(),
-      rightActiveMap: new Map(),
+      leftActiveList: [],
+      rightActiveList: [],
     };
   }
 
@@ -115,8 +115,8 @@ class Game extends Component {
           onTimeUpdate={this.tick}
         />
         <div id="callguide">
-          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeMap={this.state.leftActiveMap}/>
-          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeMap={this.state.rightActiveMap}/>
+          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeList={this.state.leftActiveList}/>
+          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeList={this.state.rightActiveList}/>
         </div>
       </div>
     </div>);
@@ -166,8 +166,8 @@ class Game extends Component {
       mp3: mapping.mp3,
       left: mapping.left,
       right: mapping.right,
-      leftActiveMap: this.getActiveMap(0, mapping.left),
-      rightActiveMap: this.getActiveMap(0, mapping.right),
+      leftActiveList: this.getActiveList(0, mapping.left),
+      rightActiveList: this.getActiveList(0, mapping.right),
     });
   }
 
@@ -180,37 +180,38 @@ class Game extends Component {
   }
 
   tick(time) {
-    const leftActiveMap = this.getActiveMap(time, this.state.left);
-    const rightActiveMap = this.getActiveMap(time, this.state.right);
+    const leftActiveList = this.getActiveList(time, this.state.left);
+    const rightActiveList = this.getActiveList(time, this.state.right);
 
     if (this.settingsManager.settings.callSFX &&
-        this.callActivated(leftActiveMap, rightActiveMap) &&
+        this.callActivated(leftActiveList, rightActiveList) &&
         this.player.playing()) {
       this.callSFX.play();
     }
 
     this.setState({
-      leftActiveMap: leftActiveMap,
-      rightActiveMap: rightActiveMap,
+      leftActiveList: leftActiveList,
+      rightActiveList: rightActiveList,
     });
   }
 
-  getActiveMap(time, mapping) {
-    let activeMap = new Map();
+  getActiveList(time, mapping) {
+    let activeList = [];
     mapping.forEach((m, idx) => {
       if (m.range != null) {
         const isActive = (m.range[0] <= time && time < m.range[1]);
-        activeMap.set(idx, isActive);
+        if (isActive) {
+          activeList.push(idx);
+        }
       }
     });
-    return activeMap;
+    return activeList;
   }
 
-  callActivated(leftActiveMap, rightActiveMap) {
-    const evaluateSide = (mapping, prevMap, nextMap) => {
-      for (let [key, value] of nextMap) {
-        if (value === true &&
-            prevMap.get(key) === false &&
+  callActivated(leftActiveList, rightActiveList) {
+    const evaluateSide = (mapping, prevList, nextList) => {
+      for (let key of nextList) {
+        if (prevList.indexOf(key) === -1 &&
             mapping[key].src === 'calls') {
           return true;
         }
@@ -218,11 +219,11 @@ class Game extends Component {
       return false;
     };
     return evaluateSide(this.state.left,
-                        this.state.leftActiveMap,
-                        leftActiveMap) ||
+                        this.state.leftActiveList,
+                        leftActiveList) ||
            evaluateSide(this.state.right,
-                        this.state.rightActiveMap,
-                        rightActiveMap);
+                        this.state.rightActiveList,
+                        rightActiveList);
   }
 
   toggleAbout() {

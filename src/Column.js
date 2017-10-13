@@ -6,11 +6,13 @@ class Column extends Component {
     if (this.props.songId !== nextProps.songId) {
       return true;
     }
-    if (this.props.activeMap.size !== nextProps.activeMap.size) {
+    if (this.props.activeList.length !== nextProps.activeList.length) {
       return true;
     }
-    for (let [key, value] of this.props.activeMap.entries()) {
-      if (nextProps.activeMap.get(key) !== value) {
+    let curList = this.props.activeList;
+    let nextList = nextProps.activeList;
+    for (let i = 0; i < curList.length; i++) {
+      if (curList[i] !== nextList[i]) {
         return true;
       }
     }
@@ -36,7 +38,7 @@ class Column extends Component {
             src={m.src}
             text={m.text}
             type={m.type}
-            active={this.props.activeMap.get(idx)}
+            active={this.props.activeList.indexOf(idx) !== -1}
           />
         );
       } else {
