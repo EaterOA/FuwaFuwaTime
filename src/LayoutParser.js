@@ -23,10 +23,12 @@ class LayoutParser {
       return {type: "text", str: str};
     });
 
-    // context-aware parse
+    // stateful parse
     let stream = mapping.left;
     let callMode = false;
     let together = false;
+    let repeatCount = 0;
+    let repeatFrom = null;
     let push = null;
     let timings = { calls: song.calls, lyrics: song.lyrics };
     let refs = { calls: 0, lyrics: 0 };
@@ -35,9 +37,11 @@ class LayoutParser {
         stream.push({type:"text", text: tokens[i].str, src: (callMode ? 'calls' : 'lyrics'), push:push});
         push = null;
         i += 1;
+
       } else if (tokens[i].type === "newline") {
         stream.push({type:"newline"});
         i += 1;
+
       } else if (tokens[i].type === "opening_bracket") {
         if (!(i+2 < tokens.length &&
             tokens[i+1].type === "text" &&
@@ -48,8 +52,30 @@ class LayoutParser {
         const func = tokens[i+1].str.split(',');
         if (func[0] === "call") {
           callMode = true;
+          if (func.length > 1) {
+            repeatFrom = stream.length;
+            repeatCount = parseInt(func[1], 10);
+          }
         } else if (func[0] === "end-call") {
           callMode = false;
+          if (repeatCount > 0) {
+            let repeatTo = stream.length;
+            for (let i = 0; i < repeatCount; i++) {
+              for (let j = repeatFrom; j < repeatTo; j++) {
+                if (stream[j].type === 'atom') {
+                  stream[j].alts.push(stream.length);
+                  stream.push({
+                    type: 'repeat',
+                    range: timings['calls'][refs['calls']],
+                    src: 'calls',
+                  });
+                  refs['calls']++;
+                }
+              }
+            }
+            stream.push({type:"text", text: ' x ' + repeatCount, src: 'calls'});
+            repeatCount = 0;
+          }
         } else if (func[0] === "next-col") {
           stream = mapping.right;
         } else if (func[0] === "push") {
@@ -58,6 +84,7 @@ class LayoutParser {
           together = true;
         }
         i += 3;
+
       } else if (tokens[i].type === "opening_brace") {
         if (!(i+2 < tokens.length &&
             tokens[i+1].type === "text" &&
@@ -79,6 +106,7 @@ class LayoutParser {
           text: text,
           range: timings[src][refs[src]],
           push: push,
+          alts: [],
         });
         push = null;
         together = false;

@@ -37,9 +37,15 @@ class Column extends Component {
             src={m.src}
             text={m.text}
             type={m.type}
-            active={this.props.activeList.indexOf(idx) !== -1}
+            active={this.props.activeList.indexOf(idx) !== -1 ||
+                    m.alts.filter((i) => this.props.activeList.indexOf(i) !== -1).length > 0}
           />
         );
+
+      } else if (m.type === 'repeat') {
+        return null;
+        // no-op
+
       } else {
         console.assert(false, "Unknown type " + m.type);
         return null;
