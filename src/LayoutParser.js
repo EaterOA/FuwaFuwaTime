@@ -60,7 +60,7 @@ class LayoutParser {
           callMode = false;
           if (repeatCount > 0) {
             let repeatTo = stream.length;
-            for (let i = 0; i < repeatCount; i++) {
+            for (let i = 0; i < repeatCount-1; i++) {
               for (let j = repeatFrom; j < repeatTo; j++) {
                 if (stream[j].type === 'atom') {
                   stream[j].alts.push(stream.length);
