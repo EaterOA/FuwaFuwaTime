@@ -95,6 +95,7 @@ class Game extends Component {
             />
           </div>
         }
+        //onMouseDown={()=>{console.log(this.player.getCurrentTime());this.callSFX.play();}}
       />
       <div
         id="game"
