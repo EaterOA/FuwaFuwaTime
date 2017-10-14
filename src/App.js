@@ -106,18 +106,22 @@ class Game extends Component {
           open={this.state.aboutOpened}
           toggle={this.toggleAbout}
         />
-        <div id="song-name">{this.state.songName}</div>
-        <AudioPlayer
-          ref={(element) => {this.player = element}}
-          ogg={this.state.ogg}
-          mp3={this.state.mp3}
-          defaultVolume={this.defaultVolume}
-          onVolumeChange={this.changeVolume}
-          onTimeUpdate={this.tick}
-        />
-        <div id="callguide">
-          <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeList={this.state.leftActiveList}/>
-          <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeList={this.state.rightActiveList}/>
+        <div
+          id="callguide-area"
+        >
+          <div id="song-name">{this.state.songName}</div>
+          <AudioPlayer
+            ref={(element) => {this.player = element}}
+            ogg={this.state.ogg}
+            mp3={this.state.mp3}
+            defaultVolume={this.defaultVolume}
+            onVolumeChange={this.changeVolume}
+            onTimeUpdate={this.tick}
+          />
+          <div id="callguide">
+            <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeList={this.state.leftActiveList}/>
+            <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeList={this.state.rightActiveList}/>
+          </div>
         </div>
       </div>
     </div>);
