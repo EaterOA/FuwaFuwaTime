@@ -28,7 +28,7 @@ class AboutDrawer extends Component {
         <p className="small">(*No relationship to the popular song of the same name, other than the creator thought it was a clever pun but now regrets that this app is no longer Googleable)</p>
         <p>
         Note that in reality there is no definitive set of calls that everyone follows to the letter - this interactive callguide only presents one version for each song that hits most of the common calls. You and the other livers in the concert or live viewing may do something minorly or majorly different.</p>
-        <p className="small">(As long as you don't taiga)</p>
+        <p className="small">(As long as you don't yakkai)</p>
         <h2>Contact</h2>
         <p>Direct all bug reports, questions, concerns, and complaints to <a href="https://www.reddit.com/user/gacha4life/"><strong>gacha4life</strong></a></p>
         <h2>Thanks</h2>
