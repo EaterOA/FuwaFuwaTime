@@ -95,7 +95,6 @@ class Game extends Component {
             />
           </div>
         }
-        //onMouseDown={()=>{console.log(this.player.getCurrentTime());this.callSFX.play();}}
       />
       <div
         id="game"
@@ -277,6 +276,9 @@ class Game extends Component {
       const seek = Math.min(this.player.getDuration(), this.player.getCurrentTime() + 2);
       this.player.jumpTo(seek);
       e.preventDefault();
+
+    } else if (e.keyCode === 96) {
+      //console.log(this.player.getCurrentTime());this.callSFX.play();
     }
   }
 }
