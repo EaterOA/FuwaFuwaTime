@@ -34,7 +34,8 @@ class AboutDrawer extends Component {
         <h2>Thanks</h2>
         <ul>
           <li><a href="https://onibe.moe"><strong>Team Onibe</strong></a> for designing the official unofficial Love Live! callguides</li>
-          <li><strong>Eter</strong> and <strong>Yunii</strong> for advice on call layout/style</li>
+          <li><strong>Yunii</strong> for helping with call layout and pointing out timing errors</li>
+          <li><strong>Eter</strong> for providing advice on call layout/style</li>
         </ul>
       </Drawer>
     )
