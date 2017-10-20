@@ -2,6 +2,10 @@ body {
   margin: 0px;
 }
 
+.appbar h1 {
+  font-family: 'Kalam', cursive;
+}
+
 #game {
   display: flex;
   flex-direction: column;

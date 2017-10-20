@@ -77,6 +77,7 @@ class Game extends Component {
     return (<div>
       <AppBar
         title="FuwaFuwaTime"
+        className="appbar"
         style={{ position: "fixed" }}
         iconElementLeft={
           <SongMenu
