@@ -141,9 +141,11 @@ class Game extends Component {
     document.onkeydown = this.keydown;
 
     // open about drawer
-    this.setState({
-      aboutOpened: true,
-    });
+    if (this.settingsManager.settings.openAbout) {
+      this.setState({
+        aboutOpened: true,
+      });
+    }
   }
 
   loadSongFromHash() {
@@ -232,6 +234,7 @@ class Game extends Component {
   }
 
   toggleAbout() {
+    this.settingsManager.changeSetting('openAbout', !this.state.aboutOpened);
     this.setState({
       aboutOpened : !this.state.aboutOpened
     });
