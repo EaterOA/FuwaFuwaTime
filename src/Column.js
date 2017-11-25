@@ -33,7 +33,8 @@ class Column extends Component {
           <Atom
             key={id+idx}
             jump={() => this.props.jumpTo(m.range[0])}
-            style={{marginLeft: m.push}}
+            push={m.push}
+            transition={m.transition}
             src={m.src}
             text={m.text}
             type={m.type}
