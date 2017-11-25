@@ -10,6 +10,9 @@ class LayoutParser {
     delete mapping.calls;
     mapping.left = [];
     mapping.right = [];
+    if (song.layout == null || song.layout.length === 0) {
+      return mapping;
+    }
 
     // lex
     const layout = song.layout.join('\n');
