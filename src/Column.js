@@ -32,14 +32,14 @@ class Column extends Component {
         return (
           <Atom
             key={id+idx}
-            jump={() => this.props.jumpTo(m.range[0])}
+            jump={() => this.props.jumpTo(m.start)}
             push={m.push}
             transition={m.transition}
             src={m.src}
             text={m.text}
             type={m.type}
             active={this.props.activeList.indexOf(idx) !== -1 ||
-                    m.alts.filter((i) => this.props.activeList.indexOf(i) !== -1).length > 0}
+                    (m.alts && m.alts.filter((i) => this.props.activeList.indexOf(i) !== -1).length > 0)}
           />
         );
 

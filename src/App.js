@@ -205,8 +205,8 @@ class Game extends Component {
   getActiveList(time, mapping) {
     let activeList = [];
     mapping.forEach((m, idx) => {
-      if (m.range != null) {
-        const isActive = (m.range[0] <= time && time < m.range[1]);
+      if (m.start != null) {
+        const isActive = (m.start <= time && time < m.end);
         if (isActive) {
           activeList.push(idx);
         }
