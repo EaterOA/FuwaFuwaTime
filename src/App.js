@@ -16,7 +16,7 @@ import AboutDrawer from './AboutDrawer.js';
 
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
-import { c } from './c.json';
+import c from './c.json';
 
 const muiTheme = getMuiTheme({
   "palette": {
