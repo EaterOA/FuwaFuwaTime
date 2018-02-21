@@ -4,7 +4,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import './App.css';
-import 'whatwg-fetch';
 
 import AboutButton from './AboutButton.js';
 import SettingsMenu from './SettingsMenu.js';
@@ -16,7 +15,9 @@ import LayoutParser from './LayoutParser.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
-import config from './config.json';
+import base64 from 'base64-arraybuffer';
+import pako from 'pako';
+import { c } from './c.json';
 
 const muiTheme = getMuiTheme({
   "palette": {
@@ -127,9 +128,9 @@ class Game extends Component {
     </div>);
   }
 
-  componentDidMount() {
+  initialize(config) {
     // parse mappings
-    this.mappings = config.map(this.layoutParser.parseMapping);
+    this.mappings = config;
     this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
 
     // load
@@ -145,6 +146,20 @@ class Game extends Component {
       this.setState({
         aboutOpened: true,
       });
+    }
+  }
+
+  componentDidMount() {
+    let app = this;
+    if (!c) {
+      app.initialize([]);
+    } else {
+      const data = base64.decode(c)
+      const typedArray = new Uint8Array(data);
+      const inflated = pako.inflate(typedArray);
+      const jsonStr = new TextDecoder("utf-8").decode(inflated);
+      const config = JSON.parse(jsonStr);
+      app.initialize(config);
     }
   }
 

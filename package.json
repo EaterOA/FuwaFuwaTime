@@ -3,10 +3,11 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "base64-arraybuffer": "^0.1.5",
+    "pako": "^1.0.6",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.13",
-    "whatwg-fetch": "^2.0.3"
+    "react-scripts": "1.0.13"
   },
   "scripts": {
     "start": "react-scripts start",
