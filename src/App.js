@@ -11,7 +11,6 @@ import SongMenu from './SongMenu.js';
 import Column from './Column.js';
 import SFXManager from './SFXManager.js';
 import SettingsManager from './SettingsManager.js';
-import LayoutParser from './LayoutParser.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
@@ -55,7 +54,6 @@ class Game extends Component {
     this.player = null;
     this.callSFX = new SFXManager('sound/call.wav', 3);
     this.settingsManager = new SettingsManager();
-    this.layoutParser = new LayoutParser();
     this.mappings = [];
     this.defaultVolume = this.settingsManager.settings.volume;
 
