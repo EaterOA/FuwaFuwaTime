@@ -16,7 +16,7 @@ import AboutDrawer from './AboutDrawer.js';
 
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
-import c from './c.json';
+import stream from './stream.json';
 
 const muiTheme = getMuiTheme({
   "palette": {
@@ -149,10 +149,10 @@ class Game extends Component {
 
   componentDidMount() {
     let app = this;
-    if (!c) {
+    if (!stream) {
       app.initialize([]);
     } else {
-      const data = base64.decode(c)
+      const data = base64.decode(stream)
       const typedArray = new Uint8Array(data);
       const inflated = pako.inflate(typedArray);
       const jsonStr = new TextDecoder("utf-8").decode(inflated);
