@@ -67,8 +67,9 @@ class Game extends Component {
       mp3: null,
       left: [],
       right: [],
-      leftActiveList: [],
-      rightActiveList: [],
+      leftStatusList: [],
+      rightStatusList: [],
+      karaoke: false,
     };
   }
 
@@ -118,8 +119,22 @@ class Game extends Component {
             onTimeUpdate={this.tick}
           />
           <div id="callguide">
-            <Column id="left" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.left} activeList={this.state.leftActiveList}/>
-            <Column id="right" songId={this.state.songId} jumpTo={this.jumpTo} mapping={this.state.right} activeList={this.state.rightActiveList}/>
+            <Column
+              id="left"
+              songId={this.state.songId}
+              jumpTo={this.jumpTo}
+              mapping={this.state.left}
+              statusList={this.state.leftStatusList}
+              karaoke={this.state.karaoke}
+            />
+            <Column
+              id="right"
+              songId={this.state.songId}
+              jumpTo={this.jumpTo}
+              mapping={this.state.right}
+              statusList={this.state.rightStatusList}
+              karaoke={this.state.karaoke}
+            />
           </div>
         </div>
       </div>
@@ -186,8 +201,9 @@ class Game extends Component {
       mp3: mapping.mp3,
       left: mapping.left,
       right: mapping.right,
-      leftActiveList: this.getActiveList(0, mapping.left),
-      rightActiveList: this.getActiveList(0, mapping.right),
+      leftStatusList: this.getStatusList(0, mapping.left),
+      rightStatusList: this.getStatusList(0, mapping.right),
+      karaoke: mapping.karaoke,
     });
   }
 
@@ -200,50 +216,52 @@ class Game extends Component {
   }
 
   tick(time) {
-    const leftActiveList = this.getActiveList(time, this.state.left);
-    const rightActiveList = this.getActiveList(time, this.state.right);
+    const leftStatusList = this.getStatusList(time, this.state.left);
+    const rightStatusList = this.getStatusList(time, this.state.right);
 
     if (this.settingsManager.settings.callSFX &&
-        this.callActivated(leftActiveList, rightActiveList) &&
-        this.player.playing()) {
+        this.player.playing() &&
+        (
+          this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
+          this.callActivated(this.state.right, this.state.rightStatusList, rightStatusList)
+        )) {
       this.callSFX.play();
     }
 
     this.setState({
-      leftActiveList: leftActiveList,
-      rightActiveList: rightActiveList,
+      leftStatusList: leftStatusList,
+      rightStatusList: rightStatusList,
     });
   }
 
-  getActiveList(time, mapping) {
-    let activeList = [];
+  getStatusList(time, mapping) {
+    let statusList = {
+      past: [],
+      active: [],
+      future: [],
+    };
     mapping.forEach((m, idx) => {
       if (m.start != null) {
-        const isActive = (m.start <= time && time < m.end);
-        if (isActive) {
-          activeList.push(idx);
+        if (time < m.start) {
+          statusList.future.push(idx);
+        } else if (time < m.end) {
+          statusList.active.push(idx);
+        } else {
+          statusList.past.push(idx);
         }
       }
     });
-    return activeList;
+    return statusList;
   }
 
-  callActivated(leftActiveList, rightActiveList) {
-    const evaluateSide = (mapping, prevList, nextList) => {
-      for (let key of nextList) {
-        if (prevList.indexOf(key) === -1 &&
-            mapping[key].src === 'calls') {
-          return true;
-        }
+  callActivated(mapping, prevStatusList, nextStatusList) {
+    for (let key of nextStatusList.active) {
+      if (prevStatusList.active.indexOf(key) === -1 &&
+          mapping[key].src === 'calls') {
+        return true;
       }
-      return false;
-    };
-    return evaluateSide(this.state.left,
-                        this.state.leftActiveList,
-                        leftActiveList) ||
-           evaluateSide(this.state.right,
-                        this.state.rightActiveList,
-                        rightActiveList);
+    }
+    return false;
   }
 
   toggleAbout() {
@@ -293,9 +311,6 @@ class Game extends Component {
       const seek = Math.min(this.player.getDuration(), this.player.getCurrentTime() + 2);
       this.player.jumpTo(seek);
       e.preventDefault();
-
-    } else if (e.keyCode === 96) {
-      //console.log(this.player.getCurrentTime());this.callSFX.play();
     }
   }
 }

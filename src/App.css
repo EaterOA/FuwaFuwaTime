@@ -104,6 +104,14 @@ body {
   text-shadow: 3px 0px 3px #c4c4c4,
                0px 3px 3px #c4c4c4;
 }
+.lyrics.active.karaoke {
+  text-shadow: 0px 0px 6px #0c5ba0,
+               0px 0px 4px #0c5ba0;
+  color: white;
+}
+.lyrics.past.karaoke {
+  color: #a5a5a5;
+}
 .calls {
   font-size: 0.9em;
   font-weight: 600;

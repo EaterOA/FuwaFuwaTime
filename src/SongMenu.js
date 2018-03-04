@@ -18,7 +18,11 @@ class SongMenu extends Component {
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       >
         {
-          this.props.songs.map((song) => {
+          this.props.songs
+          .filter((song) => {
+            return !song.hidden;
+          })
+          .map((song) => {
             return (
               <MenuItem
                 key={song.id}

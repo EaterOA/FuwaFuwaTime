@@ -6,17 +6,31 @@ class Column extends Component {
     if (this.props.songId !== nextProps.songId) {
       return true;
     }
-    if (this.props.activeList.length !== nextProps.activeList.length) {
+    if (this.props.statusList.past.length !== nextProps.statusList.past.length) {
       return true;
     }
-    let curList = this.props.activeList;
-    let nextList = nextProps.activeList;
-    for (let i = 0; i < curList.length; i++) {
-      if (curList[i] !== nextList[i]) {
-        return true;
-      }
+    if (this.props.statusList.future.length !== nextProps.statusList.future.length) {
+      return true;
     }
     return false;
+  }
+  computeAtomStatus(mapping, idx) {
+    const statusList = this.props.statusList;
+    if (statusList.active.indexOf(idx) !== -1) {
+      return 1;
+    }
+    if (mapping.alts &&
+        mapping.alts.find((i) => statusList.active.indexOf(i) !== -1) != null) {
+      return 1;
+    }
+    if (statusList.future.indexOf(idx) !== -1) {
+      return 2;
+    }
+    if (mapping.alts &&
+        mapping.alts.find((i) => statusList.future.indexOf(i) !== -1)) {
+      return 2;
+    }
+    return 0;
   }
   render() {
     const id = this.props.songId;
@@ -29,6 +43,7 @@ class Column extends Component {
         return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text.replace(/ /g, '\u00a0')}</span>
 
       } else if (m.type === "atom") {
+        const status = this.computeAtomStatus(m, idx);
         return (
           <Atom
             key={id+idx}
@@ -38,8 +53,9 @@ class Column extends Component {
             src={m.src}
             text={m.text}
             type={m.type}
-            active={this.props.activeList.indexOf(idx) !== -1 ||
-                    (m.alts && m.alts.filter((i) => this.props.activeList.indexOf(i) !== -1).length > 0)}
+            karaoke={this.props.karaoke}
+            past={status === 0}
+            active={status === 1}
           />
         );
 
