@@ -42,7 +42,7 @@ class SongMenu extends Component {
         <MenuItem disabled>
           <TextField
             ref={(ref) => (this.searchTextField = ref)}
-            autoFocus
+            autoFocus={!window.matchMedia("(max-width: 768px)").matches}
             hintText={'Filter'}
             onFocus={this.props.onMenuFocus}
             onBlur={this.props.onMenuBlur}
