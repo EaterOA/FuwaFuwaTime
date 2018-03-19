@@ -80,13 +80,16 @@ class Game extends Component {
         className="appbar"
         style={{ position: "fixed" }}
         iconElementLeft={
-          <SongMenu
-            songs={this.mappings}
-            songClick={this.songClick}
-          />
+          <div className="song-menu">
+            <SongMenu
+              current={this.state.songId}
+              songs={this.mappings}
+              songClick={this.songClick}
+            />
+          </div>
         }
         iconElementRight={
-          <div>
+          <div className="game-menu">
             <SettingsMenu
               {...this.state.settings}
               changeSetting={this.changeSetting}
@@ -100,7 +103,6 @@ class Game extends Component {
       <div
         id="game"
         className="game"
-        style={{ paddingTop: 64 }}
       >
         <AboutDrawer
           open={this.state.aboutOpened}
