@@ -56,6 +56,7 @@ class Game extends Component {
     this.settingsManager = new SettingsManager();
     this.mappings = [];
     this.defaultVolume = this.settingsManager.settings.volume;
+    this.disablePlayerControls = 0;
 
     // initial render state
     this.state = {
@@ -72,6 +73,12 @@ class Game extends Component {
       karaoke: false,
     };
   }
+  onMenuFocus = () => {
+    this.disablePlayerControls += 1;
+  };
+  onMenuBlur = () => {
+    this.disablePlayerControls -= 1;
+  };
 
   render() {
     return (<div>
@@ -82,7 +89,8 @@ class Game extends Component {
         iconElementLeft={
           <div className="song-menu">
             <SongMenu
-              current={this.state.songId}
+              onMenuBlur={this.onMenuBlur}
+              onMenuFocus={this.onMenuFocus}
               songs={this.mappings}
               songClick={this.songClick}
             />
@@ -154,7 +162,7 @@ class Game extends Component {
     // events
     window.onhashchange = this.loadSongFromHash;
     window.requestAnimationFrame(this.nextFrame);
-    document.onkeydown = this.keydown;
+    document.addEventListener('keydown', this.keydown);
 
     // open about drawer
     if (this.settingsManager.settings.openAbout) {
@@ -297,6 +305,10 @@ class Game extends Component {
   }
 
   keydown(e) {
+    if (this.disablePlayerControls > 0) {
+      return;
+    }
+
     // space - toggle play
     if (e.keyCode === 32) {
       this.player.toggle();
