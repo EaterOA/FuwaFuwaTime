@@ -16,21 +16,26 @@ class Column extends Component {
   }
   computeAtomStatus(mapping, idx) {
     const statusList = this.props.statusList;
+
+    let status = 0;
     if (statusList.active.indexOf(idx) !== -1) {
-      return 1;
-    }
-    if (mapping.alts &&
+      status = 1;
+    } else if (mapping.alts &&
         mapping.alts.find((i) => statusList.active.indexOf(i) !== -1) != null) {
-      return 1;
-    }
-    if (statusList.future.indexOf(idx) !== -1) {
-      return 2;
-    }
-    if (mapping.alts &&
+      status = 1;
+    } else if (statusList.future.indexOf(idx) !== -1) {
+      status = 2;
+    } else if (mapping.alts &&
         mapping.alts.find((i) => statusList.future.indexOf(i) !== -1)) {
-      return 2;
+      status = 2;
     }
-    return 0;
+
+    let lineActive = false;
+    if (statusList.lineActive.indexOf(idx) !== -1) {
+      lineActive = true;
+    }
+
+    return [status, lineActive];
   }
   render() {
     const id = this.props.songId;
@@ -43,19 +48,19 @@ class Column extends Component {
         return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text.replace(/ /g, '\u00a0')}</span>
 
       } else if (m.type === "atom") {
-        const status = this.computeAtomStatus(m, idx);
+        const [status, lineActive] = this.computeAtomStatus(m, idx);
         return (
           <Atom
             key={id+idx}
             jump={() => this.props.jumpTo(m.start)}
             push={m.push}
-            transition={m.transition}
+            transition={m.kdur}
             src={m.src}
             text={m.text}
             type={m.type}
             karaoke={this.props.karaoke}
-            past={status === 0}
-            active={status === 1}
+            status={status}
+            line={lineActive}
           />
         );
 

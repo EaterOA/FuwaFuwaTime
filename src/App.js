@@ -249,6 +249,7 @@ class Game extends Component {
       past: [],
       active: [],
       future: [],
+      lineActive: [],
     };
     mapping.forEach((m, idx) => {
       if (m.start != null) {
@@ -258,6 +259,12 @@ class Game extends Component {
           statusList.active.push(idx);
         } else {
           statusList.past.push(idx);
+        }
+
+        if (m.kdur != null) {
+          if (m.line_start <= time && time < m.line_end) {
+            statusList.lineActive.push(idx);
+          }
         }
       }
     });
