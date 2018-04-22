@@ -15,7 +15,7 @@ class SettingsMenu extends PureComponent {
         iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
         iconStyle={{backgroundColor: 'transparent', color:'white'}}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
       >
           <MenuItem
             primaryText="Call SFX"
