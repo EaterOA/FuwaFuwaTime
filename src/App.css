@@ -105,10 +105,14 @@ body {
   float: right;
 }
 
-/********* callguide text ***********/
+/********* base attributes for callguide text **********/
 
 .text {
   display: inline-block;
+}
+.text.timed {
+  transition: all 0.5s ease 0s;
+  cursor: pointer;
 }
 .atom {
   display: inline-block;
@@ -160,19 +164,13 @@ body {
   color: #b5765c;
 }
 
-/* call suffix - i.e. "x 3"
- * they're a nested span
- */
+/******* timed text *****/
 
-.calls .suffix,
-.calls.line .suffix {
-  transition: all 0.5s ease 0s;
+.text.timed.active,
+.text.timed.future {
+  font-style: normal;
   text-shadow: none;
   color: #cb27ac;
-  font-style: normal;
-}
-.calls.past .suffix {
-  color: #b5765c;
 }
 
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Atom from './Atom.js';
+import TimedText from './TimedText.js';
 
 class Column extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -14,7 +15,7 @@ class Column extends Component {
     }
     return false;
   }
-  computeAtomStatus(mapping, idx) {
+  computeTimingStatus(mapping, idx) {
     const statusList = this.props.statusList;
 
     let status = 0;
@@ -45,10 +46,30 @@ class Column extends Component {
         return <br key={id+idx} />
 
       } else if (m.type === "text") {
-        return <span style={{marginLeft: m.push}} key={id+idx} className={"text " + m.src}>{m.text.replace(/ /g, '\u00a0')}</span>
+        return (
+          <TimedText
+            key={id+idx}
+            src={m.src}
+            text={m.text}
+            push={m.push}
+          />
+        );
+
+      } else if (m.type === "timed-text") {
+        const [status, ] = this.computeTimingStatus(m, idx);
+        return (
+          <TimedText
+            key={id+idx}
+            jump={() => this.props.jumpTo(m.start)}
+            src={m.src}
+            status={status}
+            text={m.text}
+            push={m.push}
+          />
+        );
 
       } else if (m.type === "atom") {
-        const [status, lineActive] = this.computeAtomStatus(m, idx);
+        const [status, lineActive] = this.computeTimingStatus(m, idx);
         return (
           <Atom
             key={id+idx}
@@ -61,7 +82,6 @@ class Column extends Component {
             karaoke={this.props.karaoke}
             status={status}
             line={lineActive}
-            repeated={m.alts ? m.alts.length : 0}
           />
         );
 

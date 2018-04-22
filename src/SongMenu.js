@@ -50,6 +50,8 @@ class SongMenu extends Component {
             value={this.state.searchText}
           />
         </MenuItem>
+        {/* div needed to prevent typing in filter box to focus on menu items
+          */}
         <div>
           {
             this.props.songs
