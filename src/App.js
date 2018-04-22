@@ -311,7 +311,8 @@ class Game extends Component {
   }
 
   jumpTo(time) {
-    this.player.jumpTo(time);
+    // NB: adding small fraction to ensure proper activeness
+    this.player.jumpTo(time + 0.001);
   }
 
   keydown(e) {
