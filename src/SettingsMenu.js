@@ -24,6 +24,20 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('callSFX')}}
           />
+          <MenuItem
+            primaryText="Highlight current line"
+            rightIcon={
+              this.props.highlightActive ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('highlightActive')}}
+          />
+          <MenuItem
+            primaryText="Fade past lines"
+            rightIcon={
+              this.props.fadePast ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('fadePast')}}
+          />
       </IconMenu>
     );
   }

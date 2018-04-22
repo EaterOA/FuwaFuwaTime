@@ -80,6 +80,18 @@ class Game extends Component {
     this.disablePlayerControls -= 1;
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.mappings !== nextState.mappings ||
+        this.state.aboutOpened !== nextState.aboutOpened ||
+        this.state.songId !== nextState.songId ||
+        this.state.settings !== nextState.settings ||
+        this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
+        this.statusListChanged(this.state.rightStatusList, nextState.rightStatusList)) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     return (<div>
       <AppBar
@@ -136,6 +148,8 @@ class Game extends Component {
               mapping={this.state.left}
               statusList={this.state.leftStatusList}
               karaoke={this.state.karaoke}
+              fadePast={this.state.settings.fadePast}
+              highlightActive={this.state.settings.highlightActive}
             />
             <Column
               id="right"
@@ -144,6 +158,8 @@ class Game extends Component {
               mapping={this.state.right}
               statusList={this.state.rightStatusList}
               karaoke={this.state.karaoke}
+              fadePast={this.state.settings.fadePast}
+              highlightActive={this.state.settings.highlightActive}
             />
           </div>
         </div>
@@ -252,7 +268,9 @@ class Game extends Component {
       past: [],
       active: [],
       future: [],
+      linePast: [],
       lineActive: [],
+      lineFuture: [],
     };
     mapping.forEach((m, idx) => {
       if (m.start != null) {
@@ -264,14 +282,28 @@ class Game extends Component {
           statusList.past.push(idx);
         }
 
-        if (m.kdur != null) {
-          if (m.line_start <= time && time < m.line_end) {
-            statusList.lineActive.push(idx);
-          }
+        const lineStart = (m.line_start != null ? m.line_start : m.start);
+        const lineEnd = (m.line_end != null ? m.line_end : m.end);
+        if (time < lineStart) {
+          statusList.lineFuture.push(idx);
+        } else if (time < lineEnd) {
+          statusList.lineActive.push(idx);
+        } else {
+          statusList.linePast.push(idx);
         }
       }
     });
     return statusList;
+  }
+
+  statusListChanged(prevStatusList, nextStatusList) {
+    if (prevStatusList.past.length !== nextStatusList.past.length) {
+      return true;
+    }
+    if (prevStatusList.future.length !== nextStatusList.future.length) {
+      return true;
+    }
+    return false;
   }
 
   callActivated(mapping, prevStatusList, nextStatusList) {
@@ -306,7 +338,7 @@ class Game extends Component {
   changeSetting(key, value=null) {
     this.settingsManager.changeSetting(key, value);
     this.setState({
-      settings: this.settingsManager.settings,
+      settings: Object.assign({}, this.settingsManager.settings)
     });
   }
 

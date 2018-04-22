@@ -7,13 +7,19 @@ class TimedText extends PureComponent {
                     this.props.status === 1 ? "active" :
                     this.props.status === 2 ? "future" :
                     "");
+    const lineStatus = (this.props.lineStatus === 0 ? "line-past" :
+                        this.props.lineStatus === 1 ? "line-active" :
+                        this.props.lineStatus === 2 ? "line-future" :
+                        "");
     return (
       <span
         onClick={this.props.jump}
         className={"text " +
           " " + timed +
           " " + status +
-          " " + (this.props.src)
+          " " + lineStatus +
+          " " + (this.props.src) +
+          " " + (this.props.disableFade ? "disableFade" : "")
         }
         style={{marginLeft: this.props.push}}
       >

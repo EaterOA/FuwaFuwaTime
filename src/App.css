@@ -123,51 +123,67 @@ body {
 /******* lyrics *****/
 
 .lyrics {
-  /* base color */
+  /* base style
+}
+.lyrics.line-future {
+  /* future color */
   color: #3d3d3d;
 }
-.lyrics.active {
-  font-style: italic;
+.lyrics.line-past {
+  /* past color */
+  color: #a5a5a5;
 }
-.lyrics.active:not(.karaoke) {
-  /* non karaoke active - entire line is highlighted */
+.lyrics.line-active:not(.karaoke) {
+  /* non karaoke active - entire line is highlighted and italicized */
+  font-style: italic;
   text-shadow: 3px 0px 3px #c4c4c4,
                0px 3px 3px #c4c4c4;
+  color: black;
 }
-.lyrics.past.line.karaoke,
-.lyrics.active.line.karaoke {
+.lyrics.line-active.past.karaoke,
+.lyrics.line-active.active.karaoke {
   /* karaoke active - current and past syllables are highlighted */
   font-style: italic;
   text-shadow: 0px 0px 6px #0c5ba0,
                0px 0px 4px #0c5ba0;
+  /* default transition, each syllable has its own rate */
+  transition: all 0.2s ease 0s; 
   color: white;
 }
-.lyrics.past {
-  color: #a5a5a5;
+.lyrics.line-active.future.karaoke {
+  /* karaoke active - same as regular future lines */
+  color: #3d3d3d;
 }
 
 /******* calls *****/
 
-.calls,
-.calls.line {
+.calls {
   /* base style */
   font-size: 0.9em;
   font-weight: 600;
+}
+.calls.line-future {
+  /* future style */
   color: #e24400;
 }
-.calls.active {
+.calls.line-past {
+  /* past style */
+  color: #b5765c;
+}
+.calls.line-active:not(.karaoke) {
+  /* non karaoke active - entire line is highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #ffb293,
                0px 3px 3px #ffb293;
+  color: #e24400;
 }
-.calls.past {
-  color: #b5765c;
-}
+/* TODO: karaoke active (reference lyrics karaoke active above) */
+
 
 /******* timed text *****/
 
-.text.timed.active,
-.text.timed.future {
+.text.timed.line-future,
+.text.timed.line-active {
   font-style: normal;
   text-shadow: none;
   color: #cb27ac;

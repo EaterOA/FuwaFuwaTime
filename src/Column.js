@@ -1,42 +1,48 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Atom from './Atom.js';
 import TimedText from './TimedText.js';
 
-class Column extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.songId !== nextProps.songId) {
-      return true;
+class Column extends PureComponent {
+  static hasAltInList(alts, list) {
+    if (alts == null) {
+      return false;
     }
-    if (this.props.statusList.past.length !== nextProps.statusList.past.length) {
-      return true;
-    }
-    if (this.props.statusList.future.length !== nextProps.statusList.future.length) {
-      return true;
-    }
-    return false;
+    return alts.find((i) => list.indexOf(i) !== -1) != null;
   }
   computeTimingStatus(mapping, idx) {
     const statusList = this.props.statusList;
 
-    let status = 0;
-    if (statusList.active.indexOf(idx) !== -1) {
+    // element status
+    //
+    // default future
+    let status = 2;
+    // check if satisfies criteria for active
+    if (statusList.active.indexOf(idx) !== -1 ||
+        Column.hasAltInList(mapping.alts, statusList.active)) {
       status = 1;
-    } else if (mapping.alts &&
-        mapping.alts.find((i) => statusList.active.indexOf(i) !== -1) != null) {
-      status = 1;
-    } else if (statusList.future.indexOf(idx) !== -1) {
-      status = 2;
-    } else if (mapping.alts &&
-        mapping.alts.find((i) => statusList.future.indexOf(i) !== -1)) {
-      status = 2;
+    // check if satisfies criteria for past
+    } else if (statusList.past.indexOf(idx) !== -1 &&
+        !Column.hasAltInList(mapping.alts, statusList.future)) {
+      status = 0;
     }
 
-    let lineActive = false;
-    if (statusList.lineActive.indexOf(idx) !== -1) {
-      lineActive = true;
+    // line status
+    //
+    // default future
+    let lineStatus = 2;
+    if (statusList.lineActive.indexOf(idx) !== -1 ||
+        Column.hasAltInList(mapping.alts, statusList.lineActive)) {
+      if (this.props.highlightActive) {
+        lineStatus = 1;
+      }
+    } else if (statusList.linePast.indexOf(idx) !== -1 &&
+        !Column.hasAltInList(mapping.alts, statusList.lineFuture)) {
+      if (this.props.fadePast) {
+        lineStatus = 0;
+      }
     }
 
-    return [status, lineActive];
+    return [status, lineStatus];
   }
   render() {
     const id = this.props.songId;
@@ -56,20 +62,21 @@ class Column extends Component {
         );
 
       } else if (m.type === "timed-text") {
-        const [status, ] = this.computeTimingStatus(m, idx);
+        const [status, lineStatus] = this.computeTimingStatus(m, idx);
         return (
           <TimedText
             key={id+idx}
             jump={() => this.props.jumpTo(m.start)}
             src={m.src}
             status={status}
+            lineStatus={lineStatus}
             text={m.text}
             push={m.push}
           />
         );
 
       } else if (m.type === "atom") {
-        const [status, lineActive] = this.computeTimingStatus(m, idx);
+        const [status, lineStatus] = this.computeTimingStatus(m, idx);
         return (
           <Atom
             key={id+idx}
@@ -81,7 +88,7 @@ class Column extends Component {
             type={m.type}
             karaoke={this.props.karaoke}
             status={status}
-            line={lineActive}
+            lineStatus={lineStatus}
           />
         );
 

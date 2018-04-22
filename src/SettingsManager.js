@@ -4,6 +4,8 @@ class SettingsManager {
       callSFX: true,
       volume: 0.5,
       openAbout: true,
+      fadePast: true,
+      highlightActive: true,
     };
     this.loadSettings();
     this.changeSetting = this.changeSetting.bind(this);
@@ -24,6 +26,16 @@ class SettingsManager {
     if (openAboutSetting != null) {
       this.settings.openAbout = openAboutSetting === 'true';
     }
+
+    let fadePastSetting = localStorage.fadePast;
+    if (fadePastSetting != null) {
+      this.settings.fadePast = fadePastSetting === 'true';
+    }
+
+    let highlightActiveSetting = localStorage.highlightActive;
+    if (highlightActiveSetting != null) {
+      this.settings.highlightActive = highlightActiveSetting === 'true';
+    }
   }
 
   changeSetting(key, value=null) {
@@ -41,8 +53,21 @@ class SettingsManager {
       this.settings.openAbout = value;
       localStorage.setItem('openAbout', this.settings.openAbout);
 
+    } else if (key === 'fadePast') {
+      if (value == null) {
+        this.settings.fadePast = !this.settings.fadePast;
+      }
+      localStorage.setItem('fadePast', this.settings.fadePast);
+
+    } else if (key === 'highlightActive') {
+      if (value == null) {
+        this.settings.highlightActive = !this.settings.highlightActive;
+      }
+      localStorage.setItem('highlightActive', this.settings.highlightActive);
+
     } else {
       console.assert(false, 'Unknown settings key ' + key);
+      return;
     }
   }
 
