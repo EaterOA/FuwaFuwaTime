@@ -10,6 +10,11 @@ class Atom extends PureComponent {
       transition = 'text-shadow ' + (this.props.transition / 1.5) + 's'
                  + ', color ' + (this.props.transition / 1.5)  + 's';
     }
+    // if repeated, append "x N" to text
+    const suffix = (this.props.repeated > 0 ? " x " + this.props.repeated : "");
+    const suffixEle = (suffix !== "" ?
+      (<span className="suffix">{suffix}</span>) :
+      null);
     return (
       <div
         onClick={this.props.jump}
@@ -25,6 +30,7 @@ class Atom extends PureComponent {
         }}
         >
           {this.props.text}
+          {suffixEle}
       </div>
     )
   }

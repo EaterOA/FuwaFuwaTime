@@ -61,6 +61,7 @@ class Column extends Component {
             karaoke={this.props.karaoke}
             status={status}
             line={lineActive}
+            repeated={m.alts ? m.alts.length : 0}
           />
         );
 
