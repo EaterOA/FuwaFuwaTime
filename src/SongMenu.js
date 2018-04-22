@@ -1,82 +1,76 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import TextField from 'material-ui/TextField';
 
-class SongMenu extends Component {
+import UnsearchableMenuItem from './UnsearchableMenuItem';
+
+class SongMenu extends PureComponent {
   constructor(props, states) {
     super(props, states);
     this.state = {
-      filterRegex: null,
-      searchText: '',
+      songs: SongMenu.getFilteredList(props.songs, "")
     };
   }
-  handleFilter = (e) => {
-    const text = e.target.value;
-    if (text === this.state.searchText) {
-      return;
-    }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      songs: SongMenu.getFilteredList(nextProps.songs, "")
+    };
+  }
+  static getFilteredList(songs, text) {
     let regex = null;
     if (text) {
       let escapeRegExp = (str) => str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
       regex = new RegExp(escapeRegExp(text), "i");
     }
+    const newList = songs
+      .filter((song) => {
+        if (song.hidden) {
+          return false;
+        }
+        if (regex != null && !regex.test(song.name)) {
+          return false;
+        }
+        return true;
+      })
+    return newList;
+  }
+  handleFilter = (e) => {
     this.setState({
-      filterRegex: regex,
-      searchText: text,
+      songs: SongMenu.getFilteredList(this.props.songs, e.target.value)
     });
   };
   render() {
     return (
       <IconMenu
-        onKeyPress={()=>{}}
-        onClick={()=>{}}
-        touchTapCloseDelay={0}
+        disableAutoFocus={true}
         iconButtonElement={<IconButton><MenuIcon /></IconButton>}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       >
-        <MenuItem disabled>
+        <UnsearchableMenuItem disabled>
           <TextField
-            ref={(ref) => (this.searchTextField = ref)}
             autoFocus={!window.matchMedia("(max-width: 768px)").matches}
             hintText={'Filter'}
             onFocus={this.props.onMenuFocus}
             onBlur={this.props.onMenuBlur}
             onChange={this.handleFilter}
-            value={this.state.searchText}
           />
-        </MenuItem>
-        {/* div needed to prevent typing in filter box to focus on menu items
-          */}
-        <div>
-          {
-            this.props.songs
-            .filter((song) => {
-              if (song.hidden) {
-                return false;
-              }
-              if (this.state.filterRegex != null) {
-                if (!this.state.filterRegex.test(song.name)) {
-                  return false;
-                }
-              }
-              return true;
-            })
+        </UnsearchableMenuItem>
+        {
+          this.state.songs
             .map((song) => {
               return (
-                <MenuItem
+                <UnsearchableMenuItem
                   key={song.id}
-                  primaryText={song.name}
+                  text={song.name}
                   onClick={() => this.props.songClick(song.id)}
                 />
               );
             })
-          }
-        </div>
+        }
       </IconMenu>
     );
   }

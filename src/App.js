@@ -54,12 +54,12 @@ class Game extends Component {
     this.player = null;
     this.callSFX = new SFXManager('sound/call.wav', 3);
     this.settingsManager = new SettingsManager();
-    this.mappings = [];
     this.defaultVolume = this.settingsManager.settings.volume;
     this.disablePlayerControls = 0;
 
     // initial render state
     this.state = {
+      mappings: [],
       aboutOpened: false,
       songName: "",
       songId: "",
@@ -68,8 +68,8 @@ class Game extends Component {
       mp3: null,
       left: [],
       right: [],
-      leftStatusList: [],
-      rightStatusList: [],
+      leftStatusList: this.getStatusList(0, []),
+      rightStatusList: this.getStatusList(0, []),
       karaoke: false,
     };
   }
@@ -91,7 +91,7 @@ class Game extends Component {
             <SongMenu
               onMenuBlur={this.onMenuBlur}
               onMenuFocus={this.onMenuFocus}
-              songs={this.mappings}
+              songs={this.state.mappings}
               songClick={this.songClick}
             />
           </div>
@@ -153,52 +153,55 @@ class Game extends Component {
 
   initialize(config) {
     // parse mappings
-    this.mappings = config;
-    this.mappings.sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
-
-    // load
-    this.loadSongFromHash();
+    const mappings = config
+      .sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
 
     // events
-    window.onhashchange = this.loadSongFromHash;
+    window.onhashchange = () => { this.loadSongFromHash(this.state.mappings); };
     window.requestAnimationFrame(this.nextFrame);
     document.addEventListener('keydown', this.keydown);
 
-    // open about drawer
-    if (this.settingsManager.settings.openAbout) {
-      this.setState({
-        aboutOpened: true,
-      });
-    }
-  }
+    // load
+    this.loadSongFromHash(mappings);
 
+    // open about drawer
+    let aboutOpened = false;
+    if (this.settingsManager.settings.openAbout) {
+      aboutOpened = true;
+    }
+
+    // set state
+    this.setState({
+      mappings: mappings,
+      aboutOpened: aboutOpened,
+    });
+  }
   componentDidMount() {
-    let app = this;
     if (!stream) {
-      app.initialize([]);
+      this.initialize([]);
     } else {
       const data = base64.decode(stream)
       const typedArray = new Uint8Array(data);
       const inflated = pako.inflate(typedArray);
       const jsonStr = new TextDecoder("utf-8").decode(inflated);
       const config = JSON.parse(jsonStr);
-      app.initialize(config);
+      this.initialize(config);
     }
   }
 
-  loadSongFromHash() {
+  loadSongFromHash(mappings) {
     let songID = window.location.hash.slice(1).split('?')[0];
 
     // look for the song with that id
-    let mapping = this.mappings.find((element) => element.id === songID);
+    let mapping = mappings.find((element) => element.id === songID);
 
     if (mapping != null) {
       // load it if found
       this.loadSong(mapping);
 
-    } else if (this.mappings.length > 0) {
+    } else if (mappings.length > 0) {
       // otherwise, just load first song
-      this.loadSong(this.mappings[0]);
+      this.loadSong(mappings[0]);
     }
   }
 
@@ -290,7 +293,7 @@ class Game extends Component {
 
   songClick(id) {
     window.location.hash = id;
-    this.loadSongFromHash();
+    this.loadSongFromHash(this.state.mappings);
     this.setState({
       aboutOpened: false,
     });
