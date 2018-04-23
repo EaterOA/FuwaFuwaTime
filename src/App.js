@@ -361,6 +361,7 @@ class Game extends Component {
         const form = document.getElementById('callguide-area');
         const scalingFactor = 2;
         html2canvas(form, {
+          logging: false,
           scale: scalingFactor,
           ignoreElements: (element) => {
             return element.id === 'player';
