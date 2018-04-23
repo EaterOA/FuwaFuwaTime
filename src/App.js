@@ -75,6 +75,7 @@ class Game extends Component {
       leftStatusList: this.getStatusList(0, []),
       rightStatusList: this.getStatusList(0, []),
       karaoke: false,
+      generatingDownload: false,
     };
   }
   onMenuFocus = () => {
@@ -89,6 +90,7 @@ class Game extends Component {
         this.state.aboutOpened !== nextState.aboutOpened ||
         this.state.songId !== nextState.songId ||
         this.state.settings !== nextState.settings ||
+        this.state.generatingDownload !== nextState.generatingDownload ||
         this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
         this.statusListChanged(this.state.rightStatusList, nextState.rightStatusList)) {
       return true;
@@ -115,6 +117,7 @@ class Game extends Component {
         iconElementRight={
           <div className="game-menu">
             <DownloadMenu
+              loading={this.state.generatingDownload}
               download={this.download}
             />
             <SettingsMenu
@@ -351,38 +354,51 @@ class Game extends Component {
 
   download(item) {
     if (item === 'A5') {
-      const form = document.getElementById('callguide-area');
-      const scalingFactor = 2;
-      html2canvas(form, {
-        scale: scalingFactor,
-        ignoreElements: (element) => {
-          return element.id === 'player';
-        },
-        windowWidth: 1920,
-        windowHeight: 1280,
-      })
-      .then((canvas) => {
-        const pageWidth_mm = 148.0; // A5 width
-        const maxCanvasWidth_px = 950.0 * scalingFactor;
-        const conversionFactor = pageWidth_mm / maxCanvasWidth_px ;
-        const imgWidth_mm = conversionFactor * canvas.width;
-        const imgHeight_mm = conversionFactor * canvas.height;
-        const xOffset_mm = (pageWidth_mm / 2) - (imgWidth_mm / 2);
-        const yOffset_mm = 10.0;
+      // NB: the delayed start is to ensure that the generatingDownload state
+      // has enough time to propagate and invoke render, before the CPU
+      // intensive generation process blocks the UI
+      setTimeout(() => {
+        const form = document.getElementById('callguide-area');
+        const scalingFactor = 2;
+        html2canvas(form, {
+          scale: scalingFactor,
+          ignoreElements: (element) => {
+            return element.id === 'player';
+          },
+          windowWidth: 1920,
+          windowHeight: 1280,
+        })
+        .then((canvas) => {
+          const pageWidth_mm = 148.0; // A5 width
+          const maxCanvasWidth_px = 950.0 * scalingFactor;
+          const conversionFactor = pageWidth_mm / maxCanvasWidth_px ;
+          const imgWidth_mm = conversionFactor * canvas.width;
+          const imgHeight_mm = conversionFactor * canvas.height;
+          const xOffset_mm = (pageWidth_mm / 2) - (imgWidth_mm / 2);
+          const yOffset_mm = 10.0;
 
-        const img = canvas.toDataURL("image/png");
-        const pdf = new jsPDF('p', 'mm', 'a5');
-        pdf.addImage(img, xOffset_mm, yOffset_mm, imgWidth_mm, imgHeight_mm);
-        pdf.save(this.state.songId + '.pdf');
-      })
-      .catch((error) => {
-        if (error.name !== 'SecurityError') {
-          throw error;
-        } else {
-          console.log("Failed!")
-        }
+          const img = canvas.toDataURL("image/png");
+          const pdf = new jsPDF('p', 'mm', 'a5');
+          pdf.addImage(img, xOffset_mm, yOffset_mm, imgWidth_mm, imgHeight_mm);
+          pdf.save(this.state.songId + '.pdf');
+        })
+        .catch((error) => {
+          if (error.name !== 'SecurityError') {
+            throw error;
+          } else {
+            console.log("Failed!")
+          }
+        })
+        .finally(() => {
+          this.setState({
+            generatingDownload: false,
+          });
+        });
+      }, 100);
+
+      this.setState({
+        generatingDownload: true,
       });
-
     }
   }
 
