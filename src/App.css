@@ -196,6 +196,10 @@ body {
 
 
 @media (max-width: 768px) {
+  .game-menu button {
+    padding: 6px !important;
+    width: 36px !important;
+  }
   #song-name {
     margin: 30px 0px;
     font-size: 24px;
