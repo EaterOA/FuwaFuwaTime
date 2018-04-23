@@ -379,6 +379,7 @@ class Game extends Component {
           const yOffset_mm = 10.0;
 
           const img = canvas.toDataURL("image/png");
+          //window.open("data:image/png;" + img);
           const pdf = new jsPDF('p', 'mm', 'a5');
           pdf.addImage(img, xOffset_mm, yOffset_mm, imgWidth_mm, imgHeight_mm);
           pdf.save(this.state.songId + '.pdf');
