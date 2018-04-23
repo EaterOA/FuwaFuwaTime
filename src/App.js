@@ -358,6 +358,8 @@ class Game extends Component {
         ignoreElements: (element) => {
           return element.id === 'player';
         },
+        windowWidth: 1920,
+        windowHeight: 1280,
       })
       .then((canvas) => {
         const pageWidth_mm = 148.0; // A5 width
