@@ -7,6 +7,7 @@ import './App.css';
 
 import AboutButton from './AboutButton.js';
 import SettingsMenu from './SettingsMenu.js';
+import DownloadMenu from './DownloadMenu.js';
 import SongMenu from './SongMenu.js';
 import Column from './Column.js';
 import SFXManager from './SFXManager.js';
@@ -14,6 +15,8 @@ import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
 import stream from './stream.json';
@@ -49,6 +52,7 @@ class Game extends Component {
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.keydown = this.keydown.bind(this);
+    this.download = this.download.bind(this);
 
     // non-rendered state
     this.player = null;
@@ -110,6 +114,9 @@ class Game extends Component {
         }
         iconElementRight={
           <div className="game-menu">
+            <DownloadMenu
+              download={this.download}
+            />
             <SettingsMenu
               {...this.state.settings}
               changeSetting={this.changeSetting}
@@ -340,6 +347,41 @@ class Game extends Component {
     this.setState({
       settings: Object.assign({}, this.settingsManager.settings)
     });
+  }
+
+  download(item) {
+    if (item === 'A5') {
+      const form = document.getElementById('callguide-area');
+      const scalingFactor = 2;
+      html2canvas(form, {
+        scale: scalingFactor,
+        ignoreElements: (element) => {
+          return element.id === 'player';
+        },
+      })
+      .then((canvas) => {
+        const pageWidth_mm = 148.0; // A5 width
+        const maxCanvasWidth_px = 950.0 * scalingFactor;
+        const conversionFactor = pageWidth_mm / maxCanvasWidth_px ;
+        const imgWidth_mm = conversionFactor * canvas.width;
+        const imgHeight_mm = conversionFactor * canvas.height;
+        const xOffset_mm = (pageWidth_mm / 2) - (imgWidth_mm / 2);
+        const yOffset_mm = 10.0;
+
+        const img = canvas.toDataURL("image/png");
+        const pdf = new jsPDF('p', 'mm', 'a5');
+        pdf.addImage(img, xOffset_mm, yOffset_mm, imgWidth_mm, imgHeight_mm);
+        pdf.save(this.state.songId + '.pdf');
+      })
+      .catch((error) => {
+        if (error.name !== 'SecurityError') {
+          throw error;
+        } else {
+          console.log("Failed!")
+        }
+      });
+
+    }
   }
 
   jumpTo(time) {
