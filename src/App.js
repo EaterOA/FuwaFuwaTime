@@ -360,6 +360,9 @@ class Game extends Component {
       setTimeout(() => {
         const form = document.getElementById('callguide-area');
         const scalingFactor = 2;
+        // NB: temporarily apply class to modify style for canvas generation
+        // e.g. disable all transitions so image captured is not transient
+        form.classList.add("generating-pdf");
         html2canvas(form, {
           logging: false,
           scale: scalingFactor,
@@ -392,6 +395,8 @@ class Game extends Component {
           }
         })
         .finally(() => {
+          // remove style modifier
+          form.classList.remove("generating-pdf");
           this.setState({
             generatingDownload: false,
           });
