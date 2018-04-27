@@ -8,6 +8,5 @@
 /build
 
 # resources
-*.mp3
-*.ogg
-config.json
+public/sound/*
+public/artifact/*
