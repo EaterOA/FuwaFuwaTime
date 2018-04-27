@@ -11,7 +11,7 @@ class SettingsMenu extends PureComponent {
   render() {
     return (
       <IconMenu
-        touchTapCloseDelay={0}
+        clickCloseDelay={0}
         iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
         iconStyle={{backgroundColor: 'transparent', color:'white'}}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
