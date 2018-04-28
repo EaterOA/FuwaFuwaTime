@@ -98,6 +98,8 @@ body {
 
 .column {
   width: 50%;
+  white-space: nowrap;
+  min-width: 0px;
   padding-right: 15px;
   padding-left: 15px;
 }
@@ -231,6 +233,7 @@ body {
   }
   .column {
     width: auto;
+    white-space: normal;
     padding-right: none;
     padding-left: none;
     text-align:center;
