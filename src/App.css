@@ -185,12 +185,26 @@ body {
 /* TODO: karaoke active (reference lyrics karaoke active above) */
 
 
-/******* timed text *****/
+/******* notes *****/
 
-.text.timed.line-future,
-.text.timed.line-active {
-  font-style: normal;
-  text-shadow: none;
+.notes {
+  /* base style */
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.notes.line-future {
+  /* future style */
+  color: #cb27ac;
+}
+.notes.line-past {
+  /* past style */
+  color: #b181b6;
+}
+.notes.line-active:not(.karaoke) {
+  /* non karaoke active - entire line is highlighted and italicized */
+  font-style: italic;
+  text-shadow: 3px 0px 3px #ffa0ec,
+               0px 3px 3px #ffa0ec;
   color: #cb27ac;
 }
 
