@@ -196,7 +196,7 @@ body {
 }
 .notes.line-future {
   /* future style */
-  color: #cb27ac;
+  color: #9327cb;
 }
 .notes.line-past {
   /* past style */
@@ -205,9 +205,9 @@ body {
 .notes.line-active:not(.karaoke) {
   /* non karaoke active - entire line is highlighted and italicized */
   font-style: italic;
-  text-shadow: 3px 0px 3px #ffa0ec,
-               0px 3px 3px #ffa0ec;
-  color: #cb27ac;
+  text-shadow: 3px 0px 3px #b3a0ff,
+               0px 3px 3px #b3a0ff;
+  color: #9327cb;
 }
 
 
