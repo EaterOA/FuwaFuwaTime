@@ -88,7 +88,8 @@ body {
   font-family: 'PT Sans', sans-serif;
   font-size: 1em;
   max-width: 1250px;
-  padding: 15px 5px;
+  /* top left/right bottom */
+  padding: 15px 5px 50px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -229,7 +230,7 @@ body {
   #callguide {
     flex-direction: column;
     width: 100%;
-    padding: 15px 0px;
+    padding: 15px 0px 30px;
   }
   .column {
     width: auto;
