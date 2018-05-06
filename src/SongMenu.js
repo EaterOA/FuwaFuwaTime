@@ -11,13 +11,9 @@ class SongMenu extends PureComponent {
   constructor(props, states) {
     super(props, states);
     this.state = {
-      songs: SongMenu.getFilteredList(props.songs, "")
+      filterText: ""
     };
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return {
-      songs: SongMenu.getFilteredList(nextProps.songs, "")
-    };
+    this.menuCloseDelay = 100;
   }
   static getFilteredList(songs, text) {
     let regex = null;
@@ -37,9 +33,16 @@ class SongMenu extends PureComponent {
       })
     return newList;
   }
+  removeFilter = () => {
+    window.setTimeout(() => {
+      this.setState({
+        filterText: "",
+      });
+    }, this.menuCloseDelay * 2);
+  };
   handleFilter = (e) => {
     this.setState({
-      songs: SongMenu.getFilteredList(this.props.songs, e.target.value)
+      filterText: e.target.value,
     });
   };
   render() {
@@ -49,18 +52,23 @@ class SongMenu extends PureComponent {
         iconButtonElement={<IconButton><MenuIcon /></IconButton>}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+        maxHeight={window.innerHeight * 0.8 - 50}
+        onItemClick={this.removeFilter}
+        clickCloseDelay={this.menuCloseDelay}
       >
         <UnsearchableMenuItem disabled>
           <TextField
             autoFocus={!window.matchMedia("(max-width: 768px)").matches}
             hintText={'Filter'}
+            value={this.state.filterText}
             onFocus={this.props.onMenuFocus}
             onBlur={this.props.onMenuBlur}
             onChange={this.handleFilter}
           />
         </UnsearchableMenuItem>
         {
-          this.state.songs
+          SongMenu
+            .getFilteredList(this.props.songs, this.state.filterText)
             .map((song) => {
               return (
                 <UnsearchableMenuItem
