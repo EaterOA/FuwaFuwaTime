@@ -2,6 +2,7 @@ class SettingsManager {
   constructor() {
     this.settings = {
       callSFX: true,
+      callSFXVolume: 0.8,
       volume: 0.5,
       openAbout: true,
       fadePast: true,
@@ -15,6 +16,19 @@ class SettingsManager {
     let callSFXSetting = localStorage.callSFX;
     if (callSFXSetting != null) {
       this.settings.callSFX = callSFXSetting === 'true';
+    }
+
+    let callSFXVolumeSetting = localStorage.callSFXVolume;
+    if (callSFXVolumeSetting != null) {
+      let f = parseFloat(callSFXVolumeSetting);
+      if (!isNaN(f)) {
+        if (f > 1.0) {
+          f = 1.0;
+        } else if (f < 0.0) {
+          f = 0.0;
+        }
+        this.settings.callSFXVolume = f;
+      }
     }
 
     let volumeSetting = localStorage.volume;
@@ -44,6 +58,11 @@ class SettingsManager {
         this.settings.callSFX = !this.settings.callSFX;
       }
       localStorage.setItem('callSFX', this.settings.callSFX);
+
+    } else if (key === 'callSFXVolume') {
+      console.assert(0.0 <= value && value <= 1.0, 'Illegal callSFXVolume value: ' + value);
+      this.settings.callSFXVolume = value;
+      localStorage.setItem('callSFXVolume', this.settings.callSFXVolume);
 
     } else if (key === 'volume') {
       this.settings.volume = value;

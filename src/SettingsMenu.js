@@ -2,10 +2,13 @@ import React, { PureComponent } from 'react';
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Slider from 'material-ui/Slider';
 import IconButton from 'material-ui/IconButton';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import BlockIcon from 'material-ui/svg-icons/content/block';
 import DoneIcon from 'material-ui/svg-icons/action/done';
+
+import UnsearchableMenuItem from './UnsearchableMenuItem';
 
 class SettingsMenu extends PureComponent {
   render() {
@@ -24,6 +27,13 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('callSFX')}}
           />
+          <UnsearchableMenuItem disabled>
+            <Slider
+              disabled={!this.props.callSFX}
+              defaultValue={this.props.callSFXVolume}
+              onChange={(e, v) => {this.props.changeSetting('callSFXVolume', v)}}
+            />
+          </UnsearchableMenuItem>
           <MenuItem
             primaryText="Highlight current line"
             rightIcon={
