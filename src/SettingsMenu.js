@@ -32,6 +32,7 @@ class SettingsMenu extends PureComponent {
               disabled={!this.props.callSFX}
               defaultValue={this.props.callSFXVolume}
               onChange={(e, v) => {this.props.changeSetting('callSFXVolume', v)}}
+              sliderStyle={{'marginBottom': 0}}
             />
           </UnsearchableMenuItem>
           <MenuItem
