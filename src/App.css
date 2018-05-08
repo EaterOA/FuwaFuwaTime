@@ -72,6 +72,10 @@ body {
   margin-bottom: 30px;
 }
 
+#calls-player {
+  display: none;
+}
+
 
 /* 
  * Callguide

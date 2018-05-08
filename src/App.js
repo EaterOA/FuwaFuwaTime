@@ -53,12 +53,16 @@ class Game extends Component {
     this.jumpTo = this.jumpTo.bind(this);
     this.keydown = this.keydown.bind(this);
     this.download = this.download.bind(this);
+    this.onPlayerPlay = this.onPlayerPlay.bind(this);
+    this.onPlayerPause = this.onPlayerPause.bind(this);
+    this.onPlayerSeeked = this.onPlayerSeeked.bind(this);
 
     // non-rendered state
     this.player = null;
     this.settingsManager = new SettingsManager();
     this.callSFX = new SFXManager('sound/call.mp3', 3, this.settingsManager.settings.callSFXVolume);
     this.defaultVolume = this.settingsManager.settings.volume;
+    this.defaultCallSFXVolume = this.settingsManager.settings.callSFXVolume;
     this.disablePlayerControls = 0;
 
     // initial render state
@@ -70,6 +74,7 @@ class Game extends Component {
       settings: this.settingsManager.settings,
       ogg: null,
       mp3: null,
+      callsMp3: null,
       left: [],
       right: [],
       leftStatusList: this.getStatusList(0, []),
@@ -143,12 +148,28 @@ class Game extends Component {
         >
           <div id="song-name">{this.state.songName}</div>
           <AudioPlayer
+            elementId='player'
             ref={(element) => {this.player = element}}
             ogg={this.state.ogg}
             mp3={this.state.mp3}
             defaultVolume={this.defaultVolume}
             onVolumeChange={this.changeVolume}
             onTimeUpdate={this.tick}
+            onPlay={this.onPlayerPlay}
+            onPause={this.onPlayerPause}
+            onSeeked={this.onPlayerSeeked}
+          />
+          <AudioPlayer
+            elementId='calls-player'
+            ref={(element) => {this.callsPlayer = element}}
+            mp3={this.state.callsMp3}
+            defaultVolume={this.defaultCallSFXVolume}
+            hidden={true}
+          />
+          <a
+            ref={(element) => {this.downloader = element}}
+            id="downloader"
+            aria-hidden="true"
           />
           <div id="callguide">
             <Column
@@ -238,6 +259,7 @@ class Game extends Component {
       songId: mapping.id,
       ogg: mapping.ogg,
       mp3: mapping.mp3,
+      callsMp3: mapping.callsMp3,
       left: mapping.left,
       right: mapping.right,
       leftStatusList: this.getStatusList(0, mapping.left),
@@ -259,6 +281,7 @@ class Game extends Component {
     const rightStatusList = this.getStatusList(time, this.state.right);
 
     if (this.settingsManager.settings.callSFX &&
+        this.state.callsMp3 == null &&
         this.player.playing() &&
         (
           this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
@@ -327,6 +350,18 @@ class Game extends Component {
     return false;
   }
 
+  onPlayerPlay() {
+    this.callsPlayer.toggle();
+  }
+
+  onPlayerPause() {
+    this.callsPlayer.toggle();
+  }
+
+  onPlayerSeeked(time) {
+    this.callsPlayer.jumpTo(time);
+  }
+
   toggleAbout() {
     this.settingsManager.changeSetting('openAbout', !this.state.aboutOpened);
     this.setState({
@@ -353,6 +388,8 @@ class Game extends Component {
     });
     // non-rendered state
     this.callSFX.updateVolume(this.settingsManager.settings.callSFXVolume);
+    this.callsPlayer.changeVolume(this.settingsManager.settings.callSFXVolume);
+    this.callsPlayer.setMuted(!this.settingsManager.settings.callSFX);
   }
 
   download(item) {

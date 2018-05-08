@@ -8,7 +8,7 @@ class AudioPlayer extends PureComponent {
   render() {
     return (
       <audio
-        id='player'
+        id={this.props.elementId}
         controls
         ref={(element) => { this.audioEl = element; }}
       >
@@ -18,11 +18,33 @@ class AudioPlayer extends PureComponent {
   }
   componentDidMount() {
     this.audioEl.volume = this.props.defaultVolume;
+    this.audioEl.addEventListener('canplay', () => {
+      //console.log("Loaded: ", this.props.mp3);
+    });
     this.audioEl.addEventListener('volumechange', () => {
-      this.props.onVolumeChange(this.audioEl.volume);
+      if (this.props.onVolumeChange) {
+        this.props.onVolumeChange(this.audioEl.volume);
+      }
+    });
+    this.audioEl.addEventListener('play', () => {
+      if (this.props.onPlay) {
+        this.props.onPlay();
+      }
+    });
+    this.audioEl.addEventListener('pause', () => {
+      if (this.props.onPause) {
+        this.props.onPause();
+      }
+    });
+    this.audioEl.addEventListener('seeking', (e) => {
+      if (this.props.onSeeked) {
+        this.props.onSeeked(this.audioEl.currentTime);
+      }
     });
     this.audioEl.addEventListener('timeupdate', () => {
-      this.props.onTimeUpdate(this.audioEl.currentTime);
+      if (this.props.onTimeUpdate) {
+        this.props.onTimeUpdate(this.audioEl.currentTime);
+      }
     });
     this.audioEl.controlsList = 'nodownload';
   }
@@ -47,6 +69,12 @@ class AudioPlayer extends PureComponent {
     } else {
       this.audioEl.play();
     }
+  }
+  changeVolume(volume) {
+    this.audioEl.volume = volume;
+  }
+  setMuted(muted) {
+    this.audioEl.muted = muted;
   }
 }
 
