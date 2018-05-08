@@ -102,7 +102,13 @@ class Game extends Component {
   render() {
     return (<div>
       <AppBar
-        title="FuwaFuwaTime"
+        title={
+          <span
+            onClick={this.toggleAbout}
+            className="title">
+          FuwaFuwaTime
+          </span>
+        }
         className="appbar"
         style={{ position: "fixed" }}
         iconElementLeft={

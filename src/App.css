@@ -16,8 +16,9 @@ body {
  * Appbar
  */
 
-.appbar h1 {
+.appbar .title {
   font-family: 'Kalam', cursive;
+  cursor: pointer;
 }
 
 
