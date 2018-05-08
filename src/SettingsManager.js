@@ -4,7 +4,6 @@ class SettingsManager {
       callSFX: true,
       callSFXVolume: 0.8,
       volume: 0.5,
-      openAbout: true,
       fadePast: true,
       highlightActive: true,
     };
@@ -36,11 +35,6 @@ class SettingsManager {
       this.settings.volume = parseFloat(volumeSetting);
     }
 
-    let openAboutSetting = localStorage.openAbout;
-    if (openAboutSetting != null) {
-      this.settings.openAbout = openAboutSetting === 'true';
-    }
-
     let fadePastSetting = localStorage.fadePast;
     if (fadePastSetting != null) {
       this.settings.fadePast = fadePastSetting === 'true';
@@ -67,10 +61,6 @@ class SettingsManager {
     } else if (key === 'volume') {
       this.settings.volume = value;
       localStorage.setItem('volume', this.settings.volume);
-
-    } else if (key === 'openAbout') {
-      this.settings.openAbout = value;
-      localStorage.setItem('openAbout', this.settings.openAbout);
 
     } else if (key === 'fadePast') {
       if (value == null) {

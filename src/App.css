@@ -25,19 +25,50 @@ body {
  * About
  */
 
-.about-drawer {
-  padding: 20px;
-  font-size: 20px;
-  max-width: 500px;
-}
-
 .small {
   font-size: 0.5em;
 }
 
-.about-drawer h2 {
+.info-page {
+  font-size: 18px;
+  padding: 10px 80px 30px;
+}
+
+.info-page h2 {
   color: #0054a8;
   font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  margin-top: 45px;
+  margin-bottom: 25px;
+}
+
+.credits-list {
+  list-style-type: none;
+}
+.credits-list li {
+  margin: 5px 0;
+}
+
+.pdf-list {
+  font-weight: bold;
+}
+
+.instructions-list li {
+  margin: 5px 0;
+}
+
+.changelog-list li {
+  margin: 10px 0;
+}
+
+.calls-style {
+  font-weight: 600;
+  color: #e24400;
+}
+
+.notes-style {
+  font-weight: 600;
+  color: #9327cb;
 }
 
 .about-drawer a {
@@ -226,14 +257,13 @@ body {
 
 
 @media (max-width: 768px) {
-  .game-menu button {
-    padding: 6px !important;
-    width: 36px !important;
-  }
   #song-name {
     margin: 30px 0px;
     font-size: 24px;
     font-family: 'Montserrat', sans-serif;
+  }
+  .info-page {
+    padding: 0px 20px 10px;
   }
   #callguide {
     flex-direction: column;

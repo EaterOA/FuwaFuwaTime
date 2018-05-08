@@ -7,7 +7,6 @@ import './App.css';
 
 import AboutButton from './AboutButton.js';
 import SettingsMenu from './SettingsMenu.js';
-import DownloadMenu from './DownloadMenu.js';
 import SongMenu from './SongMenu.js';
 import Column from './Column.js';
 import SFXManager from './SFXManager.js';
@@ -65,7 +64,7 @@ class Game extends Component {
     // initial render state
     this.state = {
       mappings: [],
-      aboutOpened: false,
+      aboutOpened: true,
       songName: "",
       songId: "",
       settings: this.settingsManager.settings,
@@ -118,16 +117,13 @@ class Game extends Component {
         }
         iconElementRight={
           <div className="game-menu">
-            <DownloadMenu
-              loading={this.state.generatingDownload}
-              download={this.download}
-            />
             <SettingsMenu
               {...this.state.settings}
               changeSetting={this.changeSetting}
             />
             <AboutButton
               onClick={this.toggleAbout}
+              open={this.state.aboutOpened}
             />
           </div>
         }
@@ -203,16 +199,9 @@ class Game extends Component {
     // load
     this.loadSongFromHash(mappings);
 
-    // open about drawer
-    let aboutOpened = false;
-    if (this.settingsManager.settings.openAbout) {
-      aboutOpened = true;
-    }
-
     // set state
     this.setState({
       mappings: mappings,
-      aboutOpened: aboutOpened,
     });
   }
   componentDidMount() {
@@ -355,7 +344,6 @@ class Game extends Component {
   }
 
   toggleAbout() {
-    this.settingsManager.changeSetting('openAbout', !this.state.aboutOpened);
     this.setState({
       aboutOpened : !this.state.aboutOpened
     });
@@ -392,6 +380,16 @@ class Game extends Component {
   keydown(e) {
     if (this.disablePlayerControls > 0) {
       return;
+    }
+
+    // esc - close about drawer
+    if (e.keyCode === 27) {
+      if (this.state.aboutOpened) {
+        this.setState({
+          aboutOpened: false,
+        });
+        e.preventDefault();
+      }
     }
 
     // space - toggle play
