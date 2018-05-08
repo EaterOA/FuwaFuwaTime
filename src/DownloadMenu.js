@@ -33,8 +33,8 @@ class DownloadMenu extends PureComponent {
             primaryText="Download PDF (all songs)"
           />
           <MenuItem
-            href="pdf/hakodate_a5.pdf"
-            primaryText="Download PDF (Hakodate day 1)"
+            href="pdf/hakodate_d2_a5.pdf"
+            primaryText="Download PDF (Hakodate day 2)"
           />
       </IconMenu>
     );
