@@ -15,8 +15,6 @@ import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
 import stream from './stream.json';
@@ -394,58 +392,9 @@ class Game extends Component {
 
   download(item) {
     if (item === 'A5') {
-      // NB: the delayed start is to ensure that the generatingDownload state
-      // has enough time to propagate and invoke render, before the CPU
-      // intensive generation process blocks the UI
-      setTimeout(() => {
-        const form = document.getElementById('callguide-area');
-        const scalingFactor = 2;
-        // NB: temporarily apply class to modify style for canvas generation
-        // e.g. disable all transitions so image captured is not transient
-        form.classList.add("generating-pdf");
-        html2canvas(form, {
-          logging: false,
-          scale: scalingFactor,
-          ignoreElements: (element) => {
-            return element.id === 'player';
-          },
-          windowWidth: 1920,
-          windowHeight: 1280,
-        })
-        .then((canvas) => {
-          const pageWidth_mm = 148.0; // A5 width
-          const maxCanvasWidth_px = 950.0 * scalingFactor;
-          const conversionFactor = pageWidth_mm / maxCanvasWidth_px ;
-          const imgWidth_mm = conversionFactor * canvas.width;
-          const imgHeight_mm = conversionFactor * canvas.height;
-          const xOffset_mm = (pageWidth_mm / 2) - (imgWidth_mm / 2);
-          const yOffset_mm = 10.0;
-
-          const img = canvas.toDataURL("image/png");
-          //window.open("data:image/png;" + img);
-          const pdf = new jsPDF('p', 'mm', 'a5');
-          pdf.addImage(img, xOffset_mm, yOffset_mm, imgWidth_mm, imgHeight_mm);
-          pdf.save(this.state.songId + '.pdf');
-        })
-        .catch((error) => {
-          if (error.name !== 'SecurityError') {
-            throw error;
-          } else {
-            console.log("Failed!")
-          }
-        })
-        .finally(() => {
-          // remove style modifier
-          form.classList.remove("generating-pdf");
-          this.setState({
-            generatingDownload: false,
-          });
-        });
-      }, 100);
-
-      this.setState({
-        generatingDownload: true,
-      });
+      this.downloader.href = "artifact/callguide_a5.pdf";
+      this.downloader.download = "callguide_a5.pdf";
+      this.downloader.click();
     }
   }
 
