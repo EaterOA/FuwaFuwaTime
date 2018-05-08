@@ -28,8 +28,8 @@ class AboutDrawer extends Component {
               <li>To start, select a song from the menu on the top-left.</li>
               <li>Click the play button on the audio player, and follow the lyrics as they highlight
                 <ul>
-                  <li>Calls are colored in <span class="calls-style">red</span></li>
-                  <li>Annotations/notes are colored in <span class="notes-style">purple</span></li>
+                  <li>Calls are colored in <span className="calls-style">red</span></li>
+                  <li>Annotations/notes are colored in <span className="notes-style">purple</span></li>
                 </ul>
               </li>
               <li>You can also click any line of the lyrics to jump the audio to that location</li>
