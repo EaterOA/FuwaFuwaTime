@@ -50,7 +50,6 @@ class Game extends Component {
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.keydown = this.keydown.bind(this);
-    this.download = this.download.bind(this);
     this.onPlayerPlay = this.onPlayerPlay.bind(this);
     this.onPlayerPause = this.onPlayerPause.bind(this);
     this.onPlayerSeeked = this.onPlayerSeeked.bind(this);
@@ -163,11 +162,6 @@ class Game extends Component {
             mp3={this.state.callsMp3}
             defaultVolume={this.defaultCallSFXVolume}
             hidden={true}
-          />
-          <a
-            ref={(element) => {this.downloader = element}}
-            id="downloader"
-            aria-hidden="true"
           />
           <div id="callguide">
             <Column
@@ -388,14 +382,6 @@ class Game extends Component {
     this.callSFX.updateVolume(this.settingsManager.settings.callSFXVolume);
     this.callsPlayer.changeVolume(this.settingsManager.settings.callSFXVolume);
     this.callsPlayer.setMuted(!this.settingsManager.settings.callSFX);
-  }
-
-  download(item) {
-    if (item === 'A5') {
-      this.downloader.href = "artifact/callguide_a5.pdf";
-      this.downloader.download = "callguide_a5.pdf";
-      this.downloader.click();
-    }
   }
 
   jumpTo(time) {

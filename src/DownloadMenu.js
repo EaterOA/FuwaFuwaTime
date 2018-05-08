@@ -29,8 +29,12 @@ class DownloadMenu extends PureComponent {
         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
       >
           <MenuItem
-            primaryText="Download PDF (A5)"
-            onClick={() => {this.props.download('A5')}}
+            href="pdf/all_a5.pdf"
+            primaryText="Download PDF (all songs)"
+          />
+          <MenuItem
+            href="pdf/hakodate_a5.pdf"
+            primaryText="Download PDF (Hakodate day 1)"
           />
       </IconMenu>
     );
