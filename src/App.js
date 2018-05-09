@@ -388,14 +388,9 @@ class Game extends Component {
       return;
     }
 
-    // esc - close about drawer
-    if (e.keyCode === 27) {
-      if (this.state.aboutOpened) {
-        this.setState({
-          aboutOpened: false,
-        });
-        e.preventDefault();
-      }
+    // disable audio player controls if about drawer is open
+    if (this.state.aboutOpened) {
+      return;
     }
 
     // space - toggle play
