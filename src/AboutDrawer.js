@@ -44,6 +44,7 @@ class AboutDrawer extends Component {
             </ol>
             <h2>Contact</h2>
             <p>Direct all bug reports, questions, concerns, and complaints to <a href="https://www.reddit.com/user/gacha4life/"><strong>gacha4life</strong></a></p>
+            <p>You can also submit anonymous feedback through <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">this survey</a></p>
             <h2>Thanks</h2>
             <ul className="credits-list">
               <li><strong>arbshortcake</strong> for call timing</li>
@@ -70,6 +71,7 @@ class AboutDrawer extends Component {
           <Tab label="Changelog"><div className="info-page">
             <h2>Changelog</h2>
             <ul className="changelog-list">
+              <li><strong>2018-05-09</strong>: Added <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">anonymous survey link</a></li>
               <li><strong>2018-05-07</strong>: Added Hakodate day 2 setlist PDF</li>
               <li><strong>2018-05-06</strong>: Added songs from Hakodate day 2 setlist</li>
               <li><strong>2017-10-20</strong>: First public release</li>
