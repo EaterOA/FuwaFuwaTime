@@ -71,6 +71,7 @@ class AboutDrawer extends Component {
           <Tab label="Changelog"><div className="info-page">
             <h2>Changelog</h2>
             <ul className="changelog-list">
+              <li><strong>2018-06-05</strong>: Corrected bits of romaji and timing in various places</li>
               <li><strong>2018-05-22</strong>: Added Tokimeki Bunruigaku and Yozora wa Nandemo Shitteru no?</li>
               <li><strong>2018-05-09</strong>: Added <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">anonymous survey link</a></li>
               <li><strong>2018-05-07</strong>: Added <a href="pdf/hakodate_d2_a5.pdf">Hakodate day 2 setlist PDF</a></li>
