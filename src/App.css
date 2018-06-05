@@ -67,9 +67,14 @@ body {
   color: #e24400;
 }
 
-.notes-style {
+.instructions-style {
   font-weight: 600;
   color: #9327cb;
+}
+
+.notes-style {
+  font-style: italic;
+  color: #2751cb;
 }
 
 .about-drawer a {
@@ -211,48 +216,51 @@ body {
   /* base style */
   font-size: 0.9em;
   font-weight: 600;
-}
-.calls.line-future {
-  /* future style */
   color: #e24400;
 }
 .calls.line-past {
   /* past style */
   color: #b5765c;
 }
-.calls.line-active:not(.karaoke) {
-  /* non karaoke active - entire line is highlighted and italicized */
+.calls.active {
+  /* active - highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #ffb293,
                0px 3px 3px #ffb293;
   color: #e24400;
 }
-/* TODO: karaoke active (reference lyrics karaoke active above) */
 
 
-/******* notes *****/
+/******* instructions *****/
 
-.notes {
+.instructions {
   /* base style */
   font-size: 0.9em;
   font-weight: 600;
-}
-.notes.line-future {
-  /* future style */
   color: #9327cb;
 }
-.notes.line-past {
+.instructions.line-past {
   /* past style */
   color: #b181b6;
 }
-.notes.line-active:not(.karaoke) {
-  /* non karaoke active - entire line is highlighted and italicized */
+.instructions.active {
+  /* active - highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #b3a0ff,
                0px 3px 3px #b3a0ff;
   color: #9327cb;
 }
 
+/******* notes *****/
+
+.notes {
+  /* style */
+  font-size: .9em;
+  font-weight: 600;
+  font-style: italic;
+  color: #2751cb;
+  cursor: text;
+}
 
 /* 
  * Media queries

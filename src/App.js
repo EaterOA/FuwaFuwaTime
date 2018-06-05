@@ -330,7 +330,7 @@ class Game extends Component {
     for (let key of nextStatusList.active) {
       if (prevStatusList.active.indexOf(key) === -1 &&
           (mapping[key].src === 'calls' ||
-          mapping[key].src === 'notes')) {
+          mapping[key].src === 'instructions')) {
         return true;
       }
     }
