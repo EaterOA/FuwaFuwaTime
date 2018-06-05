@@ -70,6 +70,12 @@ class AudioPlayer extends PureComponent {
       this.audioEl.play();
     }
   }
+  play() {
+    this.audioEl.play();
+  }
+  pause() {
+    this.audioEl.pause();
+  }
   changeVolume(volume) {
     this.audioEl.volume = volume;
   }

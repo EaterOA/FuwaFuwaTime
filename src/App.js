@@ -52,6 +52,7 @@ class Game extends Component {
     this.onPlayerPlay = this.onPlayerPlay.bind(this);
     this.onPlayerPause = this.onPlayerPause.bind(this);
     this.onPlayerSeeked = this.onPlayerSeeked.bind(this);
+    this.lastSync = 0;
 
     // non-rendered state
     this.player = null;
@@ -241,6 +242,7 @@ class Game extends Component {
 
   loadSong(mapping) {
     document.title = 'FuwaFuwaTime - ' + mapping.name;
+    this.lastSync = 0;
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
@@ -263,18 +265,50 @@ class Game extends Component {
     window.requestAnimationFrame(this.nextFrame);
   }
 
+  nextCall(time, mapping) {
+    let next= null;
+    for (let m of mapping) {
+      if (m.src !== 'calls' && m.src !== 'instructions') {
+        continue;
+      }
+      if (m.start >= time &&
+          (next == null || m.start < next)) {
+        next = m.start;
+      }
+    }
+    return next;
+  }
+
   tick(time) {
     const leftStatusList = this.getStatusList(time, this.state.left);
     const rightStatusList = this.getStatusList(time, this.state.right);
 
-    if (this.settingsManager.settings.callSFX &&
-        this.state.callsMp3 == null &&
-        this.player.playing() &&
-        (
-          this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
-          this.callActivated(this.state.right, this.state.rightStatusList, rightStatusList)
-        )) {
-      this.callSFX.play();
+    // calls handling
+    if (this.state.callsMp3 == null) {
+      // no calls track, evaluate triggering call SFX
+      if (this.settingsManager.settings.callSFX &&
+          this.player.playing() &&
+          (
+            this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
+            this.callActivated(this.state.right, this.state.rightStatusList, rightStatusList)
+          )) {
+        this.callSFX.play();
+      }
+
+    } else {
+      // has calls track, evaluate syncing
+      const now = performance.now();
+      if (now > this.lastSync + 1000) {
+        this.lastSync = now;
+        //const leftnext = this.nextCall(time, this.state.left)
+        //const rightnext = this.nextCall(time, this.state.right)
+        //console.log("evaluating sync: ", time, leftnext, rightnext);
+        //if ((leftnext == null || leftnext - time > 3) &&
+        //    (rightnext == null || rightnext - time > 3)) {
+        //  this.callsPlayer.jumpTo(time);
+        //  console.log("synced");
+        //}
+      }
     }
 
     this.setState({
@@ -338,11 +372,11 @@ class Game extends Component {
   }
 
   onPlayerPlay() {
-    this.callsPlayer.toggle();
+    this.callsPlayer.play();
   }
 
   onPlayerPause() {
-    this.callsPlayer.toggle();
+    this.callsPlayer.pause();
   }
 
   onPlayerSeeked(time) {
