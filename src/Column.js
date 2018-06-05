@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import Atom from './Atom.js';
-import TimedText from './TimedText.js';
 
 class Column extends PureComponent {
   static hasAltInList(alts, list) {
@@ -52,35 +51,17 @@ class Column extends PureComponent {
         return <br key={id+idx} />
 
       } else if (m.type === "text") {
-        return (
-          <TimedText
-            key={id+idx}
-            src={m.src}
-            text={m.text}
-            push={m.push}
-          />
-        );
-
-      } else if (m.type === "timed-text") {
-        const [status, lineStatus] = this.computeTimingStatus(m, idx);
-        return (
-          <TimedText
-            key={id+idx}
-            jump={() => this.props.jumpTo(m.start)}
-            src={m.src}
-            status={status}
-            lineStatus={lineStatus}
-            text={m.text}
-            push={m.push}
-          />
-        );
+        return <span key={id+idx} className="text">{m.text}</span>
 
       } else if (m.type === "atom") {
         const [status, lineStatus] = this.computeTimingStatus(m, idx);
         return (
           <Atom
             key={id+idx}
-            jump={() => this.props.jumpTo(m.start)}
+            jump={
+                  m.end - m.start > 0 ?
+                  () => this.props.jumpTo(m.start) :
+                  null}
             push={m.push}
             transition={m.kdur}
             src={m.src}

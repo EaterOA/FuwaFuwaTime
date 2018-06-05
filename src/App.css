@@ -158,17 +158,6 @@ body {
 
 /********* base attributes for callguide text **********/
 
-.text {
-  display: inline-block;
-}
-.text.notes {
-  font-style: italic;
-  color: #2751cb;
-}
-.text.timed {
-  transition: all 0.5s ease 0s;
-  cursor: pointer;
-}
 .atom {
   display: inline-block;
   transition: all 0.5s ease 0s;
