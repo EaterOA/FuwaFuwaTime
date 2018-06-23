@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import AppBar from 'material-ui/AppBar';
 import './App.css';
 import './AssLoader.css';
@@ -37,6 +38,7 @@ class AssLoader extends Component {
     this.keydown = this.keydown.bind(this);
     this.loadAss = this.loadAss.bind(this);
     this.requestMp3 = this.requestMp3.bind(this);
+    this.handleErrorBarClose = this.handleErrorBarClose.bind(this);
 
     // non-rendered state
     this.player = null;
@@ -55,11 +57,14 @@ class AssLoader extends Component {
       leftStatusList: this.getStatusList(0, []),
       rightStatusList: this.getStatusList(0, []),
       karaoke: false,
+      errorBar: false,
+      errorBarMessage: "",
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.mp3 !== nextState.mp3 ||
+    if (this.state.errorBar !== nextState.errorBar ||
+        this.state.mp3 !== nextState.mp3 ||
         this.state.config !== nextState.config ||
         this.state.settings !== nextState.settings ||
         this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
@@ -93,6 +98,17 @@ class AssLoader extends Component {
         id="game"
         className="game"
       >
+      <Snackbar
+        open={this.state.errorBar}
+        message={this.state.errorBarMessage}
+        onRequestClose={this.handleErrorBarClose}
+        bodyStyle={{
+          backgroundColor: "#bc0035",
+          height: "auto",
+          lineHeight: "normal",
+          padding: "24px 24px",
+        }}
+      />
         <div
           id="callguide-area"
         >
@@ -163,6 +179,12 @@ class AssLoader extends Component {
       leftStatusList: this.getStatusList(0, config.left),
       rightStatusList: this.getStatusList(0, config.right),
       karaoke: config.karaoke,
+    });
+  }
+
+  handleErrorBarClose() {
+    this.setState({
+      errorBar: false,
     });
   }
 
@@ -301,6 +323,13 @@ class AssLoader extends Component {
         return response.json();
       })
       .then((json) => {
+        if (json.error != null) {
+          this.setState({
+            errorBar: true,
+            errorBarMessage: json.error
+          });
+          return;
+        }
         const text = JSON.parse(json.data)
         const data = base64.decode(text)
         const typedArray = new Uint8Array(data);
