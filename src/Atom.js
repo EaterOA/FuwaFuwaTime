@@ -27,6 +27,8 @@ class Atom extends PureComponent {
         style={{
           marginLeft: this.props.push,
           transition: transition,
+          color: (this.props.color != null ? '#' + this.props.color : null),
+          textShadow: (status === "active" && this.props.shadowColor != null ? '0px 0px 6px #' + this.props.shadowColor : null),
         }}
         >
           {this.props.text}
