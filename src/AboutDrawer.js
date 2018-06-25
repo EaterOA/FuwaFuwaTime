@@ -63,6 +63,7 @@ class AboutDrawer extends Component {
             <h2>PDF callguides</h2>
             <p>The lyrics/calls defined in FuwaFuwaTime are used to generate these PDF callguides (A5 size):</p>
             <ul className='pdf-list'>
+              <li><a href="pdf/3rd_live_a5.pdf">Aqours 3rd Love Live tour main setlist</a></li>
               <li><a href="pdf/hakodate_d2_a5.pdf">Hakodate Unit Carnival day 2 setlist</a></li>
               <li><a href="pdf/all_a5.pdf">All songs</a></li>
             </ul>
@@ -71,6 +72,7 @@ class AboutDrawer extends Component {
           <Tab label="Changelog"><div className="info-page">
             <h2>Changelog</h2>
             <ul className="changelog-list">
+              <li><strong>2018-06-24</strong>: Added <a href="pdf/3rd_live_a5.pdf">Aqours 3rd Love Live tour main setlist PDF</a></li>
               <li><strong>2018-06-24</strong>: Added Yuuki wa Doko ni? Kimi no Mune ni!</li>
               <li><strong>2018-06-24</strong>: Added Mirai no Bokura wa Shitteru yo, MY Mai☆TONIGHT, MIRACLE WAVE, Awaken the power, WATER BLUE NEW WORLD, and WONDERFUL STORIES</li>
               <li><strong>2018-06-05</strong>: Corrected bits of romaji and timing in various places</li>
