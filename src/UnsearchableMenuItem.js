@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import MenuItem from 'material-ui/MenuItem';
+import SongMenuItem from './SongMenuItem';
 
 class UnsearchableMenuItem extends Component {
   render() {
     return (
-      <MenuItem
+      <SongMenuItem
         primaryText={this.props.text}
         {...this.props}
       />

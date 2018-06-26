@@ -8,8 +8,6 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import BlockIcon from 'material-ui/svg-icons/content/block';
 import DoneIcon from 'material-ui/svg-icons/action/done';
 
-import UnsearchableMenuItem from './UnsearchableMenuItem';
-
 class SettingsMenu extends PureComponent {
   render() {
     return (
@@ -27,14 +25,14 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('callSFX')}}
           />
-          <UnsearchableMenuItem disabled>
+          <MenuItem disabled>
             <Slider
               disabled={!this.props.callSFX}
               defaultValue={this.props.callSFXVolume}
               onChange={(e, v) => {this.props.changeSetting('callSFXVolume', v)}}
               sliderStyle={{'marginBottom': 0}}
             />
-          </UnsearchableMenuItem>
+          </MenuItem>
           <MenuItem
             primaryText="Highlight current line"
             rightIcon={

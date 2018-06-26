@@ -4,6 +4,8 @@ import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import TextField from 'material-ui/TextField';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 
 import UnsearchableMenuItem from './UnsearchableMenuItem';
 
@@ -11,9 +13,10 @@ class SongMenu extends PureComponent {
   constructor(props, states) {
     super(props, states);
     this.state = {
-      filterText: ""
+      filterText: "",
+      bin: "subunits",
+      lastOpened: "",
     };
-    this.menuCloseDelay = 100;
   }
   static getFilteredList(songs, text) {
     let regex = null;
@@ -33,19 +36,102 @@ class SongMenu extends PureComponent {
       })
     return newList;
   }
-  removeFilter = () => {
-    window.setTimeout(() => {
-      this.setState({
-        filterText: "",
-      });
-    }, this.menuCloseDelay * 2);
-  };
   handleFilter = (e) => {
     this.setState({
       filterText: e.target.value,
+      lastOpened: "",
     });
   };
+  handleBinning = (e) => {
+    this.setState({
+      bin: e.target.value,
+      lastOpened: "",
+    });
+  };
+  makeMenuItem = (id, name) => {
+    const smallScreen = window.matchMedia("(max-width: 768px)").matches;
+    return (
+      <UnsearchableMenuItem
+        key={id}
+        text={name}
+        style={ !smallScreen ? {} : {
+          width: null,
+          lineHeight: '32px',
+          maxHeight: '32px',
+          minHeight: '32px',
+          fontSize: '14px',
+        }}
+        onClick={() => {
+          this.props.songClick(id);
+          this.setState({
+            lastOpened: "",
+          });
+          window.setTimeout(() => {
+            this.setState({
+              filterText: "",
+            });
+          }, this.menuCloseDelay * 2);
+        }}
+      />
+    );
+  };
+  makeBinItem = (id, name, elements) => {
+    const smallScreen = window.matchMedia("(max-width: 768px)").matches;
+    return (
+      <UnsearchableMenuItem
+        key={id}
+        text={name}
+        menuItems={elements}
+        rightIcon={<ArrowDropRight />}
+        anchorOrigin={{"horizontal":"right","vertical":(smallScreen?"bottom":"top")}}
+        targetOrigin={{"horizontal":"left","vertical":"top"}}
+        nestedMenuStyle={{
+          position: "relative",
+          maxWidth: (smallScreen ? "288px" : null),
+        }}
+        onClick={() => {
+          this.setState({
+            lastOpened: id,
+          });
+        }}
+        open={this.state.lastOpened === id}
+      />
+    );
+  };
+  makeBins = (binConfig, idMap) => {
+    let binElements = [];
+    for (const group of binConfig) {
+      const songElements = group.songs
+        .filter((a) => idMap.get(a) != null)
+        .sort((a,b) => idMap.get(a).localeCompare(idMap.get(b), 'en', {'sensitivity': 'base'}))
+        .map((id) => this.makeMenuItem(id, idMap.get(id)))
+      if (songElements.length > 0) {
+        binElements.push(
+          this.makeBinItem(group.id, group.name, songElements)
+        );
+      }
+    }
+    return binElements;
+  };
   render() {
+    const smallScreen = window.matchMedia("(max-width: 768px)").matches;
+
+    const songs = SongMenu.getFilteredList(this.props.songs, this.state.filterText)
+    let idMap = new Map();
+    for (const song of songs) {
+      idMap.set(song.id, song.name);
+    }
+    let menuElements = []
+    if (this.state.bin === "subunits") {
+      menuElements = this.makeBins(this.props.subunits, idMap);
+    } else if (this.state.bin === "lives") {
+      menuElements = this.makeBins(this.props.lives, idMap);
+    } else {
+      menuElements = songs
+        .sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+        .map((song) => this.makeMenuItem(song.id, song.name));
+    }
+
     return (
       <IconMenu
         disableAutoFocus={true}
@@ -53,31 +139,40 @@ class SongMenu extends PureComponent {
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
         maxHeight={window.innerHeight * 0.8 - 50}
-        onItemClick={this.removeFilter}
         clickCloseDelay={this.menuCloseDelay}
       >
         <UnsearchableMenuItem disabled>
           <TextField
-            autoFocus={!window.matchMedia("(max-width: 768px)").matches}
-            hintText={'Filter'}
+            autoFocus={!smallScreen}
+            hintText={'Find'}
             value={this.state.filterText}
             onFocus={this.props.onMenuFocus}
             onBlur={this.props.onMenuBlur}
             onChange={this.handleFilter}
           />
         </UnsearchableMenuItem>
+        <UnsearchableMenuItem disabled>
+          <RadioButtonGroup
+            name="binning"
+            valueSelected={this.state.bin}
+            onChange={this.handleBinning}
+          >
+            <RadioButton
+              value="subunits"
+              label="By subunits"
+            />
+            <RadioButton
+              value="lives"
+              label="By lives"
+            />
+            <RadioButton
+              value="all"
+              label="All"
+            />
+          </RadioButtonGroup>
+        </UnsearchableMenuItem>
         {
-          SongMenu
-            .getFilteredList(this.props.songs, this.state.filterText)
-            .map((song) => {
-              return (
-                <UnsearchableMenuItem
-                  key={song.id}
-                  text={song.name}
-                  onClick={() => this.props.songClick(song.id)}
-                />
-              );
-            })
+          menuElements
         }
       </IconMenu>
     );

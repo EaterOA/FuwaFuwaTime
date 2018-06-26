@@ -65,6 +65,8 @@ class Game extends Component {
     // initial render state
     this.state = {
       mappings: [],
+      lives: [],
+      subunits: [],
       aboutOpened: true,
       songName: "",
       songId: "",
@@ -118,6 +120,8 @@ class Game extends Component {
               onMenuBlur={this.onMenuBlur}
               onMenuFocus={this.onMenuFocus}
               songs={this.state.mappings}
+              lives={this.state.lives}
+              subunits={this.state.subunits}
               songClick={this.songClick}
             />
           </div>
@@ -195,8 +199,7 @@ class Game extends Component {
 
   initialize(config) {
     // parse mappings
-    const mappings = config
-      .sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}));
+    const mappings = config.songs
 
     // events
     window.onhashchange = () => { this.loadSongFromHash(this.state.mappings); };
@@ -209,6 +212,8 @@ class Game extends Component {
     // set state
     this.setState({
       mappings: mappings,
+      subunits: config.subunits,
+      lives: config.lives,
     });
   }
   componentDidMount() {
