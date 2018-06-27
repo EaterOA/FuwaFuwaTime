@@ -72,6 +72,7 @@ class AboutDrawer extends Component {
           <Tab label="Changelog"><div className="info-page">
             <h2>Changelog</h2>
             <ul className="changelog-list">
+              <li><strong>2018-06-25</strong>: Added choosable categories to song menu</li>
               <li><strong>2018-06-24</strong>: Added <a href="pdf/3rd_live_a5.pdf">Aqours 3rd Love Live tour main setlist PDF</a></li>
               <li><strong>2018-06-24</strong>: Added Yuuki wa Doko ni? Kimi no Mune ni!</li>
               <li><strong>2018-06-24</strong>: Added Mirai no Bokura wa Shitteru yo, MY Mai☆TONIGHT, MIRACLE WAVE, Awaken the power, WATER BLUE NEW WORLD, and WONDERFUL STORIES</li>
