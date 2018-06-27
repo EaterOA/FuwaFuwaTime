@@ -362,6 +362,12 @@ class Game extends Component {
     if (prevStatusList.future.length !== nextStatusList.future.length) {
       return true;
     }
+    if (prevStatusList.linePast.length !== nextStatusList.linePast.length) {
+      return true;
+    }
+    if (prevStatusList.lineFuture.length !== nextStatusList.lineFuture.length) {
+      return true;
+    }
     return false;
   }
 

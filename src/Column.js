@@ -4,25 +4,29 @@ import Atom from './Atom.js';
 class Column extends PureComponent {
   static hasAltInList(alts, list) {
     if (alts == null) {
-      return false;
+      return undefined;
     }
-    return alts.find((i) => list.indexOf(i) !== -1) != null;
+    return alts.find((i) => list.indexOf(i) !== -1);
   }
   computeTimingStatus(mapping, idx) {
     const statusList = this.props.statusList;
 
     // element status
     //
-    // default future
-    let status = 2;
+    // default past
+    let status = 0;
     // check if satisfies criteria for active
     if (statusList.active.indexOf(idx) !== -1 ||
         Column.hasAltInList(mapping.alts, statusList.active)) {
       status = 1;
-    // check if satisfies criteria for past
-    } else if (statusList.past.indexOf(idx) !== -1 &&
-        !Column.hasAltInList(mapping.alts, statusList.future)) {
-      status = 0;
+    // check if satisfies criteria for future
+    } else if (statusList.future.indexOf(idx) !== -1) {
+      status = 2;
+    } else {
+      const futurealt = Column.hasAltInList(mapping.alts, statusList.future);
+      if (futurealt && futurealt === Column.hasAltInList(mapping.alts, statusList.lineActive)) {
+        status = 2;
+      }
     }
 
     // line status

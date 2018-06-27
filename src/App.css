@@ -184,7 +184,15 @@ body {
                0px 3px 3px #c4c4c4;
   color: black;
 }
-.lyrics.line-active.past.karaoke,
+.lyrics.line-active.past.karaoke {
+  /* karaoke active - current and past syllables are highlighted */
+  font-style: italic;
+  text-shadow: 0px 0px 3px #023e70,
+               0px 0px 3px #023e70;
+  /* default transition, each syllable has its own rate */
+  transition: all 0.7s ease 0s; 
+  color: white;
+}
 .lyrics.line-active.active.karaoke {
   /* karaoke active - current and past syllables are highlighted */
   font-style: italic;
@@ -211,7 +219,8 @@ body {
   /* past style */
   color: #b5765c;
 }
-.calls.active {
+.calls.line-active.active,
+.calls.line-active.past {
   /* active - highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #ffb293,
@@ -232,7 +241,8 @@ body {
   /* past style */
   color: #b181b6;
 }
-.instructions.active {
+.instructions.line-active.active,
+.instructions.line-active.past {
   /* active - highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #b3a0ff,
