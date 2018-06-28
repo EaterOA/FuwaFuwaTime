@@ -62,6 +62,11 @@ body {
   margin: 10px 0;
 }
 
+.changelog-date {
+  font-weight: bold;
+  color: #0054A8;
+}
+
 .calls-style {
   font-weight: 600;
   color: #e24400;
