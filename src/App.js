@@ -146,6 +146,7 @@ class Game extends Component {
         <AboutDrawer
           open={this.state.aboutOpened}
           toggle={this.toggleAbout}
+          mappings={this.state.mappings}
         />
         <div
           id="callguide-area"

@@ -6,14 +6,60 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import changelog from './changelog.json';
 
 class AboutDrawer extends Component {
+  createTextAndSongLinkElements = (text) => {
+    let splits = [{ text: text }];
+    for (let mapping of this.props.mappings) {
+      let nextSplit = []
+      for (let split of splits) {
+        if (!split.text) {
+          nextSplit.push(split);
+          continue;
+        }
+        let songSplit = split.text.split(mapping.name);
+        for (let i = 0; i < songSplit.length; i++) {
+          nextSplit.push({ text: songSplit[i] });
+          if (i+1 < songSplit.length) {
+            nextSplit.push({ name: mapping.name, id: mapping.id });
+          }
+        }
+      }
+      splits = nextSplit;
+    }
+    let elements = [];
+    for (let i = 0; i < splits.length; i++) {
+      const split = splits[i];
+      if (split.text) {
+        elements.push(
+          <span
+            key={i}
+            dangerouslySetInnerHTML={{__html: split.text}}
+          />
+        );
+      } else {
+        elements.push(
+          <a
+            key={i}
+            className="changelog-song-name"
+            href={'#' + split.id}
+            onClick={() => this.props.toggle()}
+          >
+            {split.name}
+          </a>
+        );
+      }
+    }
+    return elements;
+  };
   render() {
     let changelogElements = [];
-    for (let change of changelog) {
-      let textObj = {
-        __html: change.change
-      }
+    for (let i = 0; i < changelog.length; i++) {
+      const change = changelog[i];
+      let elements = this.createTextAndSongLinkElements(change.change);
       changelogElements.push(
-        <li><span className="changelog-date">{change.date}:</span> <span className="changelog-text" dangerouslySetInnerHTML={textObj}/></li>
+        <li key={i} >
+          <span className="changelog-date">{change.date}: </span>
+          <span className="changelog-text">{elements}</span>
+        </li>
       );
     }
     return (

@@ -67,6 +67,11 @@ body {
   color: #0054A8;
 }
 
+.about-drawer a.changelog-song-name {
+  color: #4CC4FF;
+  font-weight: bold;
+}
+
 .calls-style {
   font-weight: 600;
   color: #e24400;
