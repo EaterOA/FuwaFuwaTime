@@ -1,28 +1,21 @@
+import pizzicato from 'pizzicato';
+
 class SFXManager {
-  constructor(path, numChannels=1, volume=1.0) {
-    console.assert(numChannels > 0);
-    this.currentChannel = 0;
-    this.channels = [];
-    for (let i = 0; i < numChannels; i++) {
-      let audio = new Audio();
-      audio.src = path;
-      audio.volume = volume;
-      audio.load();
-      this.channels.push(audio);
-    }
+  constructor(path, volume=1.0) {
+    this.sfx = new pizzicato.Sound({
+      source: 'file',
+      options: {
+        path: path,
+        volume: volume,
+        attack: 0,
+      },
+    });
   }
   updateVolume(volume) {
-    for (let channel of this.channels) {
-      channel.volume = volume;
-    }
+    this.sfx.volume = volume;
   }
   play() {
-    this.channels[this.currentChannel].currentTime = 0;
-    this.channels[this.currentChannel].play();
-    this.currentChannel++;
-    if (this.currentChannel === this.channels.length) {
-      this.currentChannel = 0;
-    }
+    this.sfx.play();
   }
 }
 
