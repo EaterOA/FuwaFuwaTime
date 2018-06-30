@@ -1,7 +1,14 @@
 import React, { PureComponent } from 'react';
+import MobileDetect from 'mobile-detect';
+
 import Atom from './Atom.js';
 
 class Column extends PureComponent {
+  constructor(props) {
+    super(props);
+    const md = new MobileDetect(window.navigator.userAgent);
+    this.isMobile = md.mobile();
+  }
   static hasAltInList(alts, list) {
     if (alts == null) {
       return undefined;
@@ -66,6 +73,7 @@ class Column extends PureComponent {
                   m.end - m.start > 0 ?
                   () => this.props.jumpTo(m.start) :
                   null}
+            selectable={!this.isMobile}
             push={m.push}
             transition={m.kdur}
             src={m.src}

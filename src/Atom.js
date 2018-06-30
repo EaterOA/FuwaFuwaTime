@@ -55,6 +55,7 @@ class Atom extends PureComponent {
           transition: transition,
           color: color,
           textShadow: textShadow,
+          userSelect: (this.props.selectable ? null : 'none'),
         }}
         >
           {this.props.text}
