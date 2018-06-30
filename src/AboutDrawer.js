@@ -99,6 +99,9 @@ class AboutDrawer extends Component {
                 </ul>
               </li>
             </ol>
+            <h2>Known issues</h2>
+            <p>On desktop, switching to a different tab may cause SFX to become delayed</p>
+            <p>On mobile, SFX may not play or may play with a ~150ms delay</p>
             <h2>Contact</h2>
             <p>Direct all bug reports, questions, concerns, and complaints to <a href="https://www.reddit.com/user/gacha4life/"><strong>gacha4life</strong></a></p>
             <p>You can also submit anonymous feedback through <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">this survey</a></p>
