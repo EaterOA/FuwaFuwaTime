@@ -16,7 +16,7 @@ class SFXManager {
     }
   }
   updateVolume(volume) {
-    for (let channel in this.channels) {
+    for (let channel of this.channels) {
       channel.volume = volume;
     }
   }
