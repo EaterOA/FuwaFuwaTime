@@ -6,6 +6,7 @@ class SettingsManager {
       volume: 0.5,
       fadePast: true,
       highlightActive: true,
+      karaoke: true,
     };
     this.loadSettings();
     this.changeSetting = this.changeSetting.bind(this);
@@ -44,6 +45,11 @@ class SettingsManager {
     if (highlightActiveSetting != null) {
       this.settings.highlightActive = highlightActiveSetting === 'true';
     }
+
+    let karaokeSetting = localStorage.karaoke;
+    if (karaokeSetting != null) {
+      this.settings.karaoke = karaokeSetting === 'true';
+    }
   }
 
   changeSetting(key, value=null) {
@@ -73,6 +79,12 @@ class SettingsManager {
         this.settings.highlightActive = !this.settings.highlightActive;
       }
       localStorage.setItem('highlightActive', this.settings.highlightActive);
+
+    } else if (key === 'karaoke') {
+      if (value == null) {
+        this.settings.karaoke = !this.settings.karaoke;
+      }
+      localStorage.setItem('karaoke', this.settings.karaoke);
 
     } else {
       console.assert(false, 'Unknown settings key ' + key);

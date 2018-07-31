@@ -47,6 +47,13 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('fadePast')}}
           />
+          <MenuItem
+            primaryText="Karaoke (if available)"
+            rightIcon={
+              this.props.karaoke ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('karaoke')}}
+          />
       </IconMenu>
     );
   }

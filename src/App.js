@@ -178,7 +178,7 @@ class Game extends Component {
               jumpTo={this.jumpTo}
               mapping={this.state.left}
               statusList={this.state.leftStatusList}
-              karaoke={this.state.karaoke}
+              karaoke={this.state.karaoke && this.state.settings.karaoke}
               fadePast={this.state.settings.fadePast}
               highlightActive={this.state.settings.highlightActive}
             />
@@ -188,7 +188,7 @@ class Game extends Component {
               jumpTo={this.jumpTo}
               mapping={this.state.right}
               statusList={this.state.rightStatusList}
-              karaoke={this.state.karaoke}
+              karaoke={this.state.karaoke && this.state.settings.karaoke}
               fadePast={this.state.settings.fadePast}
               highlightActive={this.state.settings.highlightActive}
             />
