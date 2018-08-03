@@ -18,12 +18,13 @@ class AudioPlayer extends PureComponent {
   }
   componentDidMount() {
     this.audioEl.volume = this.props.defaultVolume;
+    this.audioEl.muted = this.props.defaultMuted;
     this.audioEl.addEventListener('canplay', () => {
       //console.log("Loaded: ", this.props.mp3);
     });
     this.audioEl.addEventListener('volumechange', () => {
       if (this.props.onVolumeChange) {
-        this.props.onVolumeChange(this.audioEl.volume);
+        this.props.onVolumeChange(this.audioEl.volume, this.audioEl.muted);
       }
     });
     this.audioEl.addEventListener('play', () => {

@@ -19,6 +19,21 @@ class SettingsMenu extends PureComponent {
         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
       >
           <MenuItem
+            primaryText="Music"
+            rightIcon={
+              !this.props.muted ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('muted')}}
+          />
+          <MenuItem disabled>
+            <Slider
+              disabled={this.props.muted}
+              defaultValue={this.props.volume}
+              onChange={(e, v) => {this.props.changeSetting('volume', v)}}
+              sliderStyle={{'marginBottom': 0}}
+            />
+          </MenuItem>
+          <MenuItem
             primaryText="Call SFX"
             rightIcon={
               this.props.callSFX ? <DoneIcon/> : <BlockIcon/>

@@ -45,7 +45,7 @@ class Game extends Component {
     this.nextFrame = this.nextFrame.bind(this);
     this.songClick = this.songClick.bind(this);
     this.loadSongFromHash = this.loadSongFromHash.bind(this);
-    this.changeVolume = this.changeVolume.bind(this);
+    this.onVolumeChange = this.onVolumeChange.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
     this.keydown = this.keydown.bind(this);
@@ -58,7 +58,7 @@ class Game extends Component {
     this.settingsManager = new SettingsManager();
     this.callSFX = new SFXManager('sound/call.wav', this.settingsManager.settings.callSFXVolume);
     this.defaultVolume = this.settingsManager.settings.volume;
-    this.defaultCallSFXVolume = this.settingsManager.settings.callSFXVolume;
+    this.defaultMuted = this.settingsManager.settings.muted;
     this.disablePlayerControls = 0;
     this.queuedSFX = false;
 
@@ -157,7 +157,8 @@ class Game extends Component {
             ogg={this.state.ogg}
             mp3={this.state.mp3}
             defaultVolume={this.defaultVolume}
-            onVolumeChange={this.changeVolume}
+            defaultMuted={this.defaultMuted}
+            onVolumeChange={this.onVolumeChange}
             onTimeUpdate={this.tick}
             onPlay={this.onPlayerPlay}
             onPause={this.onPlayerPause}
@@ -383,8 +384,12 @@ class Game extends Component {
     });
   }
 
-  changeVolume(volume) {
-    this.changeSetting('volume', volume);
+  onVolumeChange(volume, muted) {
+    this.settingsManager.changeSetting('volume', volume);
+    this.settingsManager.changeSetting('muted', muted);
+    this.setState({
+      settings: Object.assign({}, this.settingsManager.settings)
+    });
   }
 
   changeSetting(key, value=null) {
@@ -392,8 +397,15 @@ class Game extends Component {
     this.setState({
       settings: Object.assign({}, this.settingsManager.settings)
     });
+
     // non-rendered state
-    this.callSFX.updateVolume(this.settingsManager.settings.callSFXVolume);
+    if (key === 'callSFXVolume') {
+      this.callSFX.updateVolume(this.settingsManager.settings.callSFXVolume);
+    } else if (key === 'volume') {
+      this.player.changeVolume(this.settingsManager.settings.volume);
+    } else if (key === 'muted') {
+      this.player.setMuted(this.settingsManager.settings.muted);
+    }
   }
 
   jumpTo(time) {

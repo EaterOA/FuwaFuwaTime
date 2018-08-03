@@ -3,6 +3,7 @@ class SettingsManager {
     this.settings = {
       callSFX: true,
       callSFXVolume: 0.8,
+      muted: false,
       volume: 0.5,
       fadePast: true,
       highlightActive: true,
@@ -31,6 +32,11 @@ class SettingsManager {
       }
     }
 
+    let mutedSetting = localStorage.muted;
+    if (mutedSetting != null) {
+      this.settings.muted = mutedSetting === 'true';
+    }
+
     let volumeSetting = localStorage.volume;
     if (volumeSetting != null) {
       this.settings.volume = parseFloat(volumeSetting);
@@ -55,14 +61,22 @@ class SettingsManager {
   changeSetting(key, value=null) {
     if (key === 'callSFX') {
       if (value == null) {
-        this.settings.callSFX = !this.settings.callSFX;
+        value = !this.settings.callSFX;
       }
+      this.settings.callSFX = value;
       localStorage.setItem('callSFX', this.settings.callSFX);
 
     } else if (key === 'callSFXVolume') {
       console.assert(0.0 <= value && value <= 1.0, 'Illegal callSFXVolume value: ' + value);
       this.settings.callSFXVolume = value;
       localStorage.setItem('callSFXVolume', this.settings.callSFXVolume);
+
+    } else if (key === 'muted') {
+      if (value == null) {
+        value = !this.settings.muted;
+      }
+      this.settings.muted = value;
+      localStorage.setItem('muted', this.settings.muted);
 
     } else if (key === 'volume') {
       this.settings.volume = value;
