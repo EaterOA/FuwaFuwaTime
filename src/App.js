@@ -57,7 +57,7 @@ class Game extends Component {
     // non-rendered state
     this.player = null;
     this.settingsManager = new SettingsManager();
-    this.callSFX = new SFXManager('sound/call.mp3', this.settingsManager.settings.callSFXVolume);
+    this.callSFX = new SFXManager('sound/call.ogg', this.settingsManager.settings.callSFXVolume);
     this.defaultVolume = this.settingsManager.settings.volume;
     this.defaultCallSFXVolume = this.settingsManager.settings.callSFXVolume;
     this.disablePlayerControls = 0;
