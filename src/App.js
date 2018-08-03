@@ -52,15 +52,15 @@ class Game extends Component {
     this.onPlayerPlay = this.onPlayerPlay.bind(this);
     this.onPlayerPause = this.onPlayerPause.bind(this);
     this.onPlayerSeeked = this.onPlayerSeeked.bind(this);
-    this.lastSync = 0;
 
     // non-rendered state
     this.player = null;
     this.settingsManager = new SettingsManager();
-    this.callSFX = new SFXManager('sound/call.ogg', this.settingsManager.settings.callSFXVolume);
+    this.callSFX = new SFXManager('sound/call.wav', this.settingsManager.settings.callSFXVolume);
     this.defaultVolume = this.settingsManager.settings.volume;
     this.defaultCallSFXVolume = this.settingsManager.settings.callSFXVolume;
     this.disablePlayerControls = 0;
+    this.queuedSFX = false;
 
     // initial render state
     this.state = {
@@ -73,7 +73,6 @@ class Game extends Component {
       settings: this.settingsManager.settings,
       ogg: null,
       mp3: null,
-      callsMp3: null,
       left: [],
       right: [],
       leftStatusList: this.getStatusList(0, []),
@@ -164,13 +163,6 @@ class Game extends Component {
             onPause={this.onPlayerPause}
             onSeeked={this.onPlayerSeeked}
           />
-          <AudioPlayer
-            elementId='calls-player'
-            ref={(element) => {this.callsPlayer = element}}
-            mp3={this.state.callsMp3}
-            defaultVolume={this.defaultCallSFXVolume}
-            hidden={true}
-          />
           <div id="callguide">
             <Column
               id="left"
@@ -248,13 +240,11 @@ class Game extends Component {
 
   loadSong(mapping) {
     document.title = 'FuwaFuwaTime - ' + mapping.name;
-    this.lastSync = 0;
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
       ogg: mapping.ogg,
       mp3: mapping.mp3,
-      callsMp3: mapping.callsMp3,
       left: mapping.left,
       right: mapping.right,
       leftStatusList: this.getStatusList(0, mapping.left),
@@ -286,35 +276,21 @@ class Game extends Component {
   }
 
   tick(time) {
+    if (this.queuedSFX) {
+      this.callSFX.play();
+      this.queuedSFX = false;
+    }
     const leftStatusList = this.getStatusList(time, this.state.left);
     const rightStatusList = this.getStatusList(time, this.state.right);
 
     // calls handling
-    if (this.state.callsMp3 == null) {
-      // no calls track, evaluate triggering call SFX
-      if (this.settingsManager.settings.callSFX &&
-          this.player.playing() &&
-          (
-            this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
-            this.callActivated(this.state.right, this.state.rightStatusList, rightStatusList)
-          )) {
-        this.callSFX.play();
-      }
-
-    } else {
-      // has calls track, evaluate syncing
-      const now = performance.now();
-      if (now > this.lastSync + 1000) {
-        this.lastSync = now;
-        //const leftnext = this.nextCall(time, this.state.left)
-        //const rightnext = this.nextCall(time, this.state.right)
-        //console.log("evaluating sync: ", time, leftnext, rightnext);
-        //if ((leftnext == null || leftnext - time > 3) &&
-        //    (rightnext == null || rightnext - time > 3)) {
-        //  this.callsPlayer.jumpTo(time);
-        //  console.log("synced");
-        //}
-      }
+    if (this.settingsManager.settings.callSFX &&
+        this.player.playing() &&
+        (
+          this.callActivated(this.state.left, this.state.leftStatusList, leftStatusList) || 
+          this.callActivated(this.state.right, this.state.rightStatusList, rightStatusList)
+        )) {
+      this.queuedSFX = true;
     }
 
     this.setState({
@@ -385,15 +361,12 @@ class Game extends Component {
   }
 
   onPlayerPlay() {
-    this.callsPlayer.play();
   }
 
   onPlayerPause() {
-    this.callsPlayer.pause();
   }
 
   onPlayerSeeked(time) {
-    this.callsPlayer.jumpTo(time);
   }
 
   toggleAbout() {
@@ -421,8 +394,6 @@ class Game extends Component {
     });
     // non-rendered state
     this.callSFX.updateVolume(this.settingsManager.settings.callSFXVolume);
-    this.callsPlayer.changeVolume(this.settingsManager.settings.callSFXVolume);
-    this.callsPlayer.setMuted(!this.settingsManager.settings.callSFX);
   }
 
   jumpTo(time) {

@@ -5,14 +5,15 @@ class SFXManager {
     this.idx = 0;
     this.channels = [];
     for (let i = 0; i < channels; i++) {
-      this.channels.push(new pizzicato.Sound({
+      let sfxEle = new pizzicato.Sound({
         source: 'file',
         options: {
           path: path,
           volume: volume,
           attack: 0,
         },
-      }));
+      });
+      this.channels.push(sfxEle);
     }
   }
   updateVolume(volume) {
