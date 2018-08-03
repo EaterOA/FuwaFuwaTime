@@ -353,7 +353,7 @@ class Game extends Component {
       if (prevStatusList.active.indexOf(key) === -1 &&
           (mapping[key].src === 'calls' ||
           mapping[key].src === 'instructions') &&
-          mapping[key].nosfx != true) {
+          mapping[key].nosfx !== true) {
         return true;
       }
     }
