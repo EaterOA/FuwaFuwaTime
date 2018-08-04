@@ -199,7 +199,12 @@ class Game extends Component {
     document.addEventListener('keydown', this.keydown);
 
     // load
-    this.loadSongFromHash(mappings);
+    const loaded = this.loadSongFromHash(mappings);
+    if (loaded) {
+      this.setState({
+        aboutOpened: false,
+      });
+    }
 
     // set state
     this.setState({
@@ -230,10 +235,12 @@ class Game extends Component {
     if (mapping != null) {
       // load it if found
       this.loadSong(mapping);
+      return true;
 
     } else if (mappings.length > 0) {
       // otherwise, just load first song
       this.loadSong(mappings[0]);
+      return false;
     }
   }
 
