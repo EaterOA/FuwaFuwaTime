@@ -78,7 +78,6 @@ class Game extends Component {
       leftStatusList: this.getStatusList(0, []),
       rightStatusList: this.getStatusList(0, []),
       karaoke: false,
-      generatingDownload: false,
     };
   }
   onMenuFocus = () => {
@@ -93,7 +92,6 @@ class Game extends Component {
         this.state.aboutOpened !== nextState.aboutOpened ||
         this.state.songId !== nextState.songId ||
         this.state.settings !== nextState.settings ||
-        this.state.generatingDownload !== nextState.generatingDownload ||
         this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
         this.statusListChanged(this.state.rightStatusList, nextState.rightStatusList)) {
       return true;
