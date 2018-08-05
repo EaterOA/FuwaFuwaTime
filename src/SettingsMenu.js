@@ -30,7 +30,10 @@ class SettingsMenu extends PureComponent {
               disabled={this.props.muted}
               defaultValue={this.props.volume}
               onChange={(e, v) => {this.props.changeSetting('volume', v)}}
-              sliderStyle={{'marginBottom': 0}}
+              sliderStyle={{
+                'marginBottom': 0,
+                'marginTop': 6,
+              }}
             />
           </MenuItem>
           <MenuItem
@@ -45,7 +48,10 @@ class SettingsMenu extends PureComponent {
               disabled={!this.props.callSFX}
               defaultValue={this.props.callSFXVolume}
               onChange={(e, v) => {this.props.changeSetting('callSFXVolume', v)}}
-              sliderStyle={{'marginBottom': 0}}
+              sliderStyle={{
+                'marginBottom': 0,
+                'marginTop': 6,
+              }}
             />
           </MenuItem>
           <MenuItem
