@@ -75,6 +75,13 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('karaoke')}}
           />
+          <MenuItem
+            primaryText="Call markers"
+            rightIcon={
+              this.props.markers ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('markers')}}
+          />
       </IconMenu>
     );
   }

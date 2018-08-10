@@ -172,6 +172,7 @@ class Game extends Component {
               karaoke={this.state.karaoke && this.state.settings.karaoke}
               fadePast={this.state.settings.fadePast}
               highlightActive={this.state.settings.highlightActive}
+              hideMarkers={!this.state.settings.markers}
             />
             <Column
               id="right"
@@ -182,6 +183,7 @@ class Game extends Component {
               karaoke={this.state.karaoke && this.state.settings.karaoke}
               fadePast={this.state.settings.fadePast}
               highlightActive={this.state.settings.highlightActive}
+              hideMarkers={!this.state.settings.markers}
             />
           </div>
         </div>

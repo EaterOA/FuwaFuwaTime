@@ -84,6 +84,7 @@ class Column extends PureComponent {
             karaoke={this.props.karaoke}
             status={status}
             lineStatus={lineStatus}
+            hidden={this.props.hideMarkers && m.marker === true}
           />
         );
 
