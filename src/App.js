@@ -17,6 +17,7 @@ import AboutDrawer from './AboutDrawer.js';
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
 import stream from './stream.json';
+import key from './key.json';
 
 const muiTheme = getMuiTheme({
   "palette": {
@@ -85,6 +86,9 @@ class Game extends Component {
   };
   onMenuBlur = () => {
     this.disablePlayerControls -= 1;
+  };
+  p = (c, k) => {
+    return c.map((b, idx) => b ^ k[idx*2 % k.length]);
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -221,7 +225,9 @@ class Game extends Component {
     } else {
       const data = base64.decode(stream)
       const typedArray = new Uint8Array(data);
-      const inflated = pako.inflate(typedArray);
+      const keyArray = new Uint8Array(base64.decode(key));
+      const dArray = this.p(typedArray, keyArray);
+      const inflated = pako.inflate(dArray);
       const jsonStr = new TextDecoder("utf-8").decode(inflated);
       const config = JSON.parse(jsonStr);
       this.initialize(config);
