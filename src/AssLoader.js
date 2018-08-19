@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import AppBar from 'material-ui/AppBar';
-import './App.css';
+import './Game.css';
 import './AssLoader.css';
 import { assCompiler } from '../package.json';
 
@@ -17,13 +17,6 @@ import AudioPlayer from './AudioPlayer.js';
 
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
-
-const muiTheme = getMuiTheme({
-  "palette": {
-    "primary1Color": "#64b5f6",
-    "textColor": "rgba(0, 34, 68, 1.00)",
-  }
-});
 
 class AssLoader extends Component {
   constructor(props) {
@@ -75,7 +68,7 @@ class AssLoader extends Component {
   }
 
   render() {
-    return (<MuiThemeProvider muiTheme={muiTheme}><div>
+    return (<div>
       <AppBar
         title={
           <span
@@ -167,7 +160,7 @@ class AssLoader extends Component {
           </div>
         </div>
       </div>
-    </div></MuiThemeProvider>);
+    </div>);
   }
 
   initialize(config) {

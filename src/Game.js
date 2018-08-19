@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
-import './App.css';
+
+import './Game.css';
 
 import AboutButton from './AboutButton.js';
 import SettingsMenu from './SettingsMenu.js';
@@ -18,23 +16,6 @@ import base64 from 'base64-arraybuffer';
 import pako from 'pako';
 import stream from './stream.json';
 import key from './key.json';
-
-const muiTheme = getMuiTheme({
-  "palette": {
-    "primary1Color": "#64b5f6",
-    "textColor": "rgba(0, 34, 68, 1.00)",
-  }
-});
-
-class App extends Component {
-  render() {
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <Game/>
-      </MuiThemeProvider>
-    );
-  }
-}
 
 class Game extends Component {
   constructor(props) {
@@ -456,4 +437,4 @@ class Game extends Component {
   }
 }
 
-export default App;
+export default Game;
