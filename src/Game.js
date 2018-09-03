@@ -108,16 +108,21 @@ class Game extends Component {
         }
         style={{ position: "fixed" }}
         iconElementLeft={
-            <div className="song-menu">
-              <SongMenu
-                onMenuBlur={this.onMenuBlur}
-                onMenuFocus={this.onMenuFocus}
-                songs={this.state.mappings}
-                series={this.state.series}
-                seriesConfig={this.state.seriesConfig}
-                songClick={this.songClick}
-              />
-            </div>
+          <div className="song-menu">
+            <SongMenu
+              onMenuBlur={this.onMenuBlur}
+              onMenuFocus={this.onMenuFocus}
+              songs={this.state.mappings}
+              series={this.state.series}
+              seriesConfig={this.state.seriesConfig}
+              songClick={this.songClick}
+            />
+            <SeriesMenu
+              series={this.state.series}
+              seriesConfig={this.state.seriesConfig}
+              onClick={this.seriesClick}
+            />
+          </div>
         }
         iconElementRight={
           <div className="game-menu">

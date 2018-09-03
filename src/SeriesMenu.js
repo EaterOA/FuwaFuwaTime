@@ -37,23 +37,14 @@ class SeriesMenu extends PureComponent {
       <IconMenu
         iconButtonElement={
           <IconButton
-            style={{
-              height: null,
-              width: null,
-            }}
             iconStyle={{
-              width: '40px'
+              width: '24px',
+              transform: 'scale(2,2)',
             }}
           >
             {menuIcon}
           </IconButton>
         }
-        style={{
-          height: null,
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-        }}
         anchorOrigin={{"horizontal":"left","vertical":"bottom"}}
         targetOrigin={{"horizontal":"left","vertical":"top"}}
       >
