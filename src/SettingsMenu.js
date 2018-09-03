@@ -13,8 +13,7 @@ class SettingsMenu extends PureComponent {
     return (
       <IconMenu
         clickCloseDelay={0}
-        iconButtonElement={<IconButton><SettingsIcon /></IconButton>}
-        iconStyle={{backgroundColor: 'transparent', color:'white'}}
+        iconButtonElement={<IconButton><SettingsIcon color='white'/></IconButton>}
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
       >

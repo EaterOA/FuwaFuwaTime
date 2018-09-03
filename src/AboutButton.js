@@ -7,13 +7,12 @@ class AboutButton extends PureComponent {
   render() {
     return (
       <IconButton
-        iconStyle={{color:'white'}}
         {...this.props}
       >
         {this.props.open ? (
-          <ClearIcon/>
+          <ClearIcon color='white'/>
         ) : (
-          <InfoIcon/>
+          <InfoIcon color='white'/>
         )}
       </IconButton>
     );

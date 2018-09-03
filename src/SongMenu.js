@@ -140,7 +140,7 @@ class SongMenu extends PureComponent {
     return (
       <IconMenu
         disableAutoFocus={true}
-        iconButtonElement={<IconButton><MenuIcon /></IconButton>}
+        iconButtonElement={<IconButton><MenuIcon color='white'/></IconButton>}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
         maxHeight={window.innerHeight * 0.8 - 50}
