@@ -31,6 +31,7 @@ class Game extends Component {
     this.songClick = this.songClick.bind(this);
     this.seriesClick = this.seriesClick.bind(this);
     this.loadSongFromHash = this.loadSongFromHash.bind(this);
+    this.changeSeries = this.changeSeries.bind(this);
     this.onVolumeChange = this.onVolumeChange.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
@@ -66,6 +67,9 @@ class Game extends Component {
       rightStatusList: this.getStatusList(0, []),
       karaoke: false,
     };
+    document
+      .getElementById('theme-color-tag')
+      .setAttribute("content", seriesThemes[this.initialSeries].palette.themeColor);
   }
   onMenuFocus = () => {
     this.disablePlayerControls += 1;
@@ -258,12 +262,11 @@ class Game extends Component {
   loadSong(mapping) {
     document.title = 'FuwaFuwaTime - ' + mapping.name;
     if (this.state.series !== mapping.series) {
-      this.settingsManager.changeSetting('series', mapping.series);
+      this.changeSeries(mapping.series);
     }
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
-      series: mapping.series,
       ogg: mapping.ogg,
       mp3: mapping.mp3,
       left: mapping.left,
@@ -407,10 +410,15 @@ class Game extends Component {
   seriesClick(id) {
     window.location.hash = this.state.seriesConfig[id].default;
     this.loadSongFromHash(this.state.mappings); 
-    this.setState({
-      series: id,
-    });
-    this.settingsManager.changeSetting('series', id);
+    this.changeSeries(id);
+  }
+
+  changeSeries(series) {
+    this.setState({ series: series, });
+    this.settingsManager.changeSetting('series', series);
+    document
+      .getElementById('theme-color-tag')
+      .setAttribute("content", seriesThemes[series].palette.themeColor);
   }
 
   onVolumeChange(volume, muted) {
