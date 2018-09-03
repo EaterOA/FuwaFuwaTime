@@ -24,7 +24,7 @@ class SongMenu extends PureComponent {
       let escapeRegExp = (str) => str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
       regex = new RegExp(escapeRegExp(text), "i");
     }
-    const newList = songs
+    const newList = Object.values(songs)
       .filter((song) => {
         if (song.hidden) {
           return false;
@@ -122,14 +122,19 @@ class SongMenu extends PureComponent {
       idMap.set(song.id, song.name);
     }
     let menuElements = []
-    if (this.state.bin === "subunits") {
-      menuElements = this.makeBins(this.props.subunits, idMap);
-    } else if (this.state.bin === "lives") {
-      menuElements = this.makeBins(this.props.lives, idMap);
-    } else {
-      menuElements = songs
-        .sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
-        .map((song) => this.makeMenuItem(song.id, song.name));
+    if (this.props.seriesConfig != null) {
+      const seriesConfig = this.props.seriesConfig[this.props.series];
+      if (this.state.bin === "subunits") {
+        menuElements = this.makeBins(seriesConfig.subunits, idMap);
+      } else if (this.state.bin === "lives") {
+        menuElements = this.makeBins(seriesConfig.lives, idMap);
+      } else {
+        menuElements = seriesConfig.songs
+          .filter((id) => idMap.has(id))
+          .map((id) => this.props.songs[id])
+          .sort((a,b) => a.name.localeCompare(b.name, 'en', {'sensitivity': 'base'}))
+          .map((song) => this.makeMenuItem(song.id, song.name));
+      }
     }
 
     return (

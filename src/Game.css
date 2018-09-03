@@ -16,9 +16,18 @@ body {
  * Appbar
  */
 
+.appbar.bandori {
+  background-image: linear-gradient(110deg, #690096, #9b00af, #cc0ad6);
+}
+
 .appbar .title {
   font-family: 'Kalam', cursive;
   cursor: pointer;
+}
+
+.appbar-title-blob {
+  display: flex;
+  flex-direction: row;
 }
 
 
@@ -43,6 +52,10 @@ body {
   margin-bottom: 25px;
 }
 
+.bandori .info-page h2 {
+  color: #bc14c0;
+}
+
 .credits-list {
   list-style-type: none;
 }
@@ -65,6 +78,10 @@ body {
 .changelog-date {
   font-weight: bold;
   color: #0054A8;
+}
+
+.bandori .changelog-date {
+  color: #bc14c0;
 }
 
 .about-drawer a.changelog-song-name {

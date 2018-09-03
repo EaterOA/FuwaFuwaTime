@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import Checkbox from 'material-ui/Checkbox';
 import AppBar from 'material-ui/AppBar';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import './Game.css';
 import './AssLoader.css';
 import { assCompiler } from '../package.json';
-
 import SettingsMenu from './SettingsMenu.js';
 import Column from './Column.js';
 import SFXManager from './SFXManager.js';
 import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
+import seriesThemes from './MuiThemes.js';
 
 import base64 from 'base64-arraybuffer';
 import pako from 'pako';
@@ -30,7 +31,10 @@ class AssLoader extends Component {
     this.jumpTo = this.jumpTo.bind(this);
     this.keydown = this.keydown.bind(this);
     this.loadAss = this.loadAss.bind(this);
-    this.requestMp3 = this.requestMp3.bind(this);
+    this.loadMp3 = this.loadMp3.bind(this);
+    this.fileDrop = this.fileDrop.bind(this);
+    this.loadFile = this.loadFile.bind(this);
+    this.toggleKaraoke = this.toggleKaraoke.bind(this);
     this.handleErrorBarClose = this.handleErrorBarClose.bind(this);
 
     // non-rendered state
@@ -58,6 +62,7 @@ class AssLoader extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.errorBar !== nextState.errorBar ||
         this.state.mp3 !== nextState.mp3 ||
+        this.state.karaoke !== nextState.karaoke ||
         this.state.config !== nextState.config ||
         this.state.settings !== nextState.settings ||
         this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
@@ -68,14 +73,8 @@ class AssLoader extends Component {
   }
 
   render() {
-    return (<div>
+    return (<MuiThemeProvider muiTheme={seriesThemes['llss']}><div>
       <AppBar
-        title={
-          <span
-            className="title">
-          FuwaFuwaTime
-          </span>
-        }
         className="appbar"
         style={{ position: "fixed" }}
         iconElementRight={
@@ -90,6 +89,8 @@ class AssLoader extends Component {
       <div
         id="game"
         className="game"
+        onDragOver={(e) => {e.preventDefault(); }}
+        onDrop={this.fileDrop}
       >
       <Snackbar
         open={this.state.errorBar}
@@ -113,7 +114,7 @@ class AssLoader extends Component {
                 <input
                   type="file"
                   style={{ display: 'none' }}
-                  onChange={(e) => this.loadAss(e)}
+                  onChange={(e) => this.loadAss(e.target.files[0])}
                 />
             </RaisedButton>
             <RaisedButton
@@ -123,9 +124,15 @@ class AssLoader extends Component {
                 <input
                   type="file"
                   style={{ display: 'none' }}
-                  onChange={(e) => this.requestMp3(e)}
+                  onChange={(e) => this.loadMp3(e.target.files[0])}
                 />
             </RaisedButton>
+            <Checkbox
+              label="Karaoke"
+              checked={this.state.karaoke}
+              onCheck={this.toggleKaraoke}
+              style={{ width: null, margin: 'auto' }}
+            />
           </div>
           <AudioPlayer
             elementId='player'
@@ -160,7 +167,7 @@ class AssLoader extends Component {
           </div>
         </div>
       </div>
-    </div>);
+    </div></MuiThemeProvider>);
   }
 
   initialize(config) {
@@ -171,7 +178,6 @@ class AssLoader extends Component {
       right: config.right,
       leftStatusList: this.getStatusList(0, config.left),
       rightStatusList: this.getStatusList(0, config.right),
-      karaoke: config.karaoke,
     });
   }
 
@@ -301,7 +307,7 @@ class AssLoader extends Component {
     this.player.jumpTo(time + 0.001);
   }
 
-  loadAss(e) {
+  loadAss(file) {
     let reader = new FileReader();
     reader.onload = (e) => {
       let assText = e.target.result;
@@ -332,13 +338,62 @@ class AssLoader extends Component {
         this.initialize(config[0]);
       });
     };
-    reader.readAsText(e.target.files[0]);
+    reader.readAsText(file);
   }
 
-  requestMp3(e) {
-    const url = URL.createObjectURL(e.target.files[0]);
+  loadMp3(file) {
+    const url = URL.createObjectURL(file);
     this.setState({
       mp3: url,
+    });
+  }
+
+  fileDrop(e) {
+    e.preventDefault();
+    
+    if (e.dataTransfer.items) {
+      for (const item of e.dataTransfer.items) {
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          this.loadFile(file);
+        }
+      }
+    } else {
+      for (const file of e.dataTransfer.files) {
+        this.loadFile(file);
+      }
+    } 
+  }
+
+  loadFile(file, type) {
+    if (type == null) {
+      if (file.name.endsWith('.mp3')) {
+        type = 'mp3';
+      } else if (file.name.endsWith('.ass')) {
+        type = 'ass';
+      } else {
+        this.setState({
+          errorBar: true,
+          errorBarMessage: 'Cannot deduce file type from ' + file.name
+        });
+        return;
+      }
+    }
+
+    if (type === 'mp3') {
+      this.loadMp3(file);
+    } else if (type === 'ass') {
+      this.loadAss(file);
+    } else {
+      console.assert(false, type);
+    }
+  }
+
+  toggleKaraoke() {
+    this.setState((oldState) => {
+      return {
+        karaoke: !oldState.karaoke,
+      }
     });
   }
 

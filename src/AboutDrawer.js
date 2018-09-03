@@ -8,7 +8,7 @@ import changelog from './changelog.json';
 class AboutDrawer extends Component {
   createTextAndSongLinkElements = (text) => {
     let splits = [{ text: text }];
-    for (let mapping of this.props.mappings) {
+    for (let mapping of Object.values(this.props.mappings)) {
       let nextSplit = []
       for (let split of splits) {
         if (!split.text) {

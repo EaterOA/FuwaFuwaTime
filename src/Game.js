@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import './Game.css';
 
+import seriesThemes from './MuiThemes.js';
 import AboutButton from './AboutButton.js';
 import SettingsMenu from './SettingsMenu.js';
+import SeriesMenu from './SeriesMenu.js';
 import SongMenu from './SongMenu.js';
 import Column from './Column.js';
 import SFXManager from './SFXManager.js';
@@ -26,6 +29,7 @@ class Game extends Component {
     this.toggleAbout = this.toggleAbout.bind(this);
     this.nextFrame = this.nextFrame.bind(this);
     this.songClick = this.songClick.bind(this);
+    this.seriesClick = this.seriesClick.bind(this);
     this.loadSongFromHash = this.loadSongFromHash.bind(this);
     this.onVolumeChange = this.onVolumeChange.bind(this);
     this.changeSetting = this.changeSetting.bind(this);
@@ -41,14 +45,15 @@ class Game extends Component {
     this.callSFX = new SFXManager('sound/call.wav', this.settingsManager.settings.callSFXVolume);
     this.defaultVolume = this.settingsManager.settings.volume;
     this.defaultMuted = this.settingsManager.settings.muted;
+    this.initialSeries = this.settingsManager.settings.series;
     this.disablePlayerControls = 0;
     this.queuedSFX = false;
 
     // initial render state
     this.state = {
-      mappings: [],
-      lives: [],
-      subunits: [],
+      mappings: {},
+      series: this.settingsManager.settings.series,
+      seriesConfig: null,
       aboutOpened: true,
       songName: "",
       songId: "",
@@ -75,6 +80,7 @@ class Game extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.mappings !== nextState.mappings ||
         this.state.aboutOpened !== nextState.aboutOpened ||
+        this.state.series !== nextState.series ||
         this.state.songId !== nextState.songId ||
         this.state.settings !== nextState.settings ||
         this.statusListChanged(this.state.leftStatusList, nextState.leftStatusList) ||
@@ -85,28 +91,33 @@ class Game extends Component {
   }
 
   render() {
-    return (<div>
+    return (<MuiThemeProvider muiTheme={seriesThemes[this.state.series]}><div>
       <AppBar
         title={
-          <span
-            onClick={this.toggleAbout}
-            className="title">
-          FuwaFuwaTime
-          </span>
+          <div className='appbar-title-blob'>
+            <span
+              onClick={this.toggleAbout}
+              className="title">
+            FuwaFuwaTime
+            </span>
+          </div>
         }
-        className="appbar"
+        className={
+          "appbar" +
+          " " + this.state.series
+        }
         style={{ position: "fixed" }}
         iconElementLeft={
-          <div className="song-menu">
-            <SongMenu
-              onMenuBlur={this.onMenuBlur}
-              onMenuFocus={this.onMenuFocus}
-              songs={this.state.mappings}
-              lives={this.state.lives}
-              subunits={this.state.subunits}
-              songClick={this.songClick}
-            />
-          </div>
+            <div className="song-menu">
+              <SongMenu
+                onMenuBlur={this.onMenuBlur}
+                onMenuFocus={this.onMenuFocus}
+                songs={this.state.mappings}
+                series={this.state.series}
+                seriesConfig={this.state.seriesConfig}
+                songClick={this.songClick}
+              />
+            </div>
         }
         iconElementRight={
           <div className="game-menu">
@@ -123,7 +134,10 @@ class Game extends Component {
       />
       <div
         id="game"
-        className="game"
+        className={
+          "game"
+          + " " + this.state.series
+        }
       >
         <AboutDrawer
           open={this.state.aboutOpened}
@@ -173,20 +187,22 @@ class Game extends Component {
           </div>
         </div>
       </div>
-    </div>);
+    </div></MuiThemeProvider>);
   }
 
   initialize(config) {
     // parse mappings
-    const mappings = config.songs
+    const mappings = config.songs;
+    const seriesConfig = config.series;
 
     // events
-    window.onhashchange = () => { this.loadSongFromHash(this.state.mappings); };
+    window.onhashchange = () => { this.loadSongFromHash(this.state.mappings, this.state.seriesConfig[this.state.series].default); };
     window.requestAnimationFrame(this.nextFrame);
     document.addEventListener('keydown', this.keydown);
 
     // load
-    const loaded = this.loadSongFromHash(mappings);
+    let series = seriesConfig[this.initialSeries];
+    const loaded = this.loadSongFromHash(mappings, series.default);
     if (loaded) {
       this.setState({
         aboutOpened: false,
@@ -196,8 +212,7 @@ class Game extends Component {
     // set state
     this.setState({
       mappings: mappings,
-      subunits: config.subunits,
-      lives: config.lives,
+      seriesConfig: seriesConfig,
     });
   }
   componentDidMount() {
@@ -215,20 +230,22 @@ class Game extends Component {
     }
   }
 
-  loadSongFromHash(mappings) {
+  loadSongFromHash(mappings, defaultSongID) {
     let songID = window.location.hash.slice(1).split('?')[0];
 
     // look for the song with that id
-    let mapping = mappings.find((element) => element.id === songID);
+    let mapping = mappings[songID];
 
     if (mapping != null) {
       // load it if found
       this.loadSong(mapping);
       return true;
 
-    } else if (mappings.length > 0) {
-      // otherwise, just load first song
-      this.loadSong(mappings[0]);
+    } else {
+      // otherwise, just load default song
+      mapping = mappings[defaultSongID];
+      console.assert(mapping != null, defaultSongID);
+      this.loadSong(mapping);
       return false;
     }
   }
@@ -238,6 +255,7 @@ class Game extends Component {
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
+      series: mapping.series,
       ogg: mapping.ogg,
       mp3: mapping.mp3,
       left: mapping.left,
@@ -249,7 +267,7 @@ class Game extends Component {
   }
 
   nextFrame() {
-    if (this.player.playing()) {
+    if (this.player != null && this.player.playing()) {
       const time = this.player.getCurrentTime();
       this.tick(time);
     }
@@ -372,10 +390,19 @@ class Game extends Component {
 
   songClick(id) {
     window.location.hash = id;
-    this.loadSongFromHash(this.state.mappings);
+    this.loadSongFromHash(this.state.mappings); 
     this.setState({
       aboutOpened: false,
     });
+  }
+
+  seriesClick(id) {
+    window.location.hash = this.state.seriesConfig[id].default;
+    this.loadSongFromHash(this.state.mappings); 
+    this.setState({
+      series: id,
+    });
+    this.settingsManager.changeSetting('series', id);
   }
 
   onVolumeChange(volume, muted) {

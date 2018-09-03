@@ -9,6 +9,7 @@ class SettingsManager {
       highlightActive: true,
       karaoke: true,
       markers: true,
+      series: 'llss',
     };
     this.loadSettings();
     this.changeSetting = this.changeSetting.bind(this);
@@ -62,6 +63,11 @@ class SettingsManager {
     if (markersSetting != null) {
       this.settings.markers = markersSetting === 'true';
     }
+
+    let seriesSetting = localStorage.series;
+    if (seriesSetting != null) {
+      this.settings.series = seriesSetting;
+    }
   }
 
   changeSetting(key, value=null) {
@@ -111,6 +117,10 @@ class SettingsManager {
         this.settings.markers = !this.settings.markers;
       }
       localStorage.setItem('markers', this.settings.markers);
+
+    } else if (key === 'series') {
+      this.settings.series = value;
+      localStorage.setItem('series', this.settings.series);
 
     } else {
       console.assert(false, 'Unknown settings key ' + key);
