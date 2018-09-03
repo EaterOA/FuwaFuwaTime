@@ -164,7 +164,7 @@ class SongMenu extends PureComponent {
           >
             <RadioButton
               value="subunits"
-              label="By subunits"
+              label="By units"
             />
             <RadioButton
               value="lives"
