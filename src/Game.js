@@ -252,6 +252,9 @@ class Game extends Component {
 
   loadSong(mapping) {
     document.title = 'FuwaFuwaTime - ' + mapping.name;
+    if (this.state.series !== mapping.series) {
+      this.settingsManager.changeSetting('series', mapping.series);
+    }
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
