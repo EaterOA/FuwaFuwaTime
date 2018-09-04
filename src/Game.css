@@ -204,6 +204,11 @@ body {
   /* past color */
   color: #a5a5a5;
 }
+.lyrics.line-past.custom-colored {
+  /* past custom color, apply effects */
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}
 .lyrics.line-active:not(.karaoke) {
   /* non karaoke active - entire line is highlighted and italicized */
   font-style: italic;

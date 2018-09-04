@@ -48,7 +48,8 @@ class Atom extends PureComponent {
           " " + status +
           " " + lineStatus +
           " " + (this.props.src) +
-          " " + (this.props.karaoke ? "karaoke" : "")
+          " " + (this.props.karaoke ? "karaoke" : "") +
+          " " + (color != null ? "custom-colored" : "")
         }
         style={{
           marginLeft: this.props.push,
