@@ -79,13 +79,12 @@ class AboutDrawer extends Component {
         <Tabs>
           <Tab label="About"><div className="info-page">
             <h2>Welcome to <em>FuwaFuwaTime</em></h2>
-            <p>FuwaFuwaTime is an interactive callguide for <strong>Love Live!</strong> songs. See <a href="https://www.reddit.com/r/LoveLive/comments/4ac21a/beginners_guide_to_basic_concert_callschant/">this</a> for an explanation for what calls are.</p>
-            <p className="small">(No relationship to the popular song of the same name, other than the creator thought it was a clever pun but now regrets that this site is no longer Googleable)</p>
-            <p>
-            Note that in reality there is no definitive set of calls that everyone follows to the letter - this interactive callguide only presents one version for each song that hits most of the common calls. You and the other livers in the concert or live viewing may do something minorly or majorly different. Simply make sure not to be overly disruptive and avoid injuring others - everyone is there to have fun and to enjoy the show.</p>
+            <p>FuwaFuwaTime is an interactive callguide mostly for <strong>Love Live!</strong> songs. See <a href="https://www.reddit.com/r/LoveLive/comments/4ac21a/beginners_guide_to_basic_concert_callschant/">this</a> for an explanation for what calls are.</p>
+            <p>There may be calls for songs of other series (e.g. BanG Dream), but those will likely remain fairly limited.</p>
+            <p>Note that in practice there is no definitive set of calls that everyone follows to the letter - this interactive callguide only presents one version for each song that hits most of the common calls. You and the other livers in the concert or live viewing may do something minorly or majorly different. Simply make sure not to be overly disruptive and avoid injuring others - everyone is there to have fun and to enjoy the show.</p>
             <h2>How to use</h2>
             <ol className="instructions-list">
-              <li>To start, select a song from the menu on the top-left.</li>
+              <li>To start, select a song from the menu on the top-left. Clicking on the icon next to the menu allows you to switch song lists to a different series.</li>
               <li>Click the play button on the audio player, and follow the lyrics as they highlight
                 <ul>
                   <li>Calls are colored in <span className="calls-style">red</span></li>
@@ -110,15 +109,16 @@ class AboutDrawer extends Component {
             <p>You can also submit anonymous feedback through <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">this survey</a></p>
             <h2>Thanks</h2>
             <ul className="credits-list">
-              <li><strong>arbshortcake</strong> for call timing</li>
+              <li><strong>arbshortcake</strong> for call timing and QC</li>
               <li><strong>ramen</strong> for call research</li>
-              <li><strong>Chezz</strong> for lyrics and call timing</li>
+              <li><strong>Chezz</strong> for lyrics, call timing, and BanG Dream calls</li>
               <li><strong>Ippikiryu</strong> for lyrics QC</li>
               <li><strong>xIceArcher</strong> for lyrics QC</li>
               <li><strong>Cornsplosion</strong> for lyrics QC</li>
               <li><strong>Yunii</strong> for helping with call layout and QC</li>
               <li><strong>Eter</strong> for providing advice on call layout/style</li>
               <li><a href="https://onibe.moe"><strong>Team Onibe</strong></a> for designing the official unofficial Love Live! callguides</li>
+              <li><a href="http://bangdream.seesaa.net/"><strong>Bandori! Poppin' Call!</strong></a> for reference BanG Dream callguides</li>
             </ul>
           </div></Tab>
 
