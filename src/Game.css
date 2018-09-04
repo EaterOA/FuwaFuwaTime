@@ -85,8 +85,13 @@ body {
 }
 
 .about-drawer a.changelog-song-name {
-  color: #4CC4FF;
   font-weight: bold;
+}
+.about-drawer a.changelog-song-name.llss {
+  color: #4CC4FF;
+}
+.about-drawer a.changelog-song-name.bandori {
+  color: #EA4DFB;
 }
 
 .calls-style {

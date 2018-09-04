@@ -19,7 +19,7 @@ class AboutDrawer extends Component {
         for (let i = 0; i < songSplit.length; i++) {
           nextSplit.push({ text: songSplit[i] });
           if (i+1 < songSplit.length) {
-            nextSplit.push({ name: mapping.name, id: mapping.id });
+            nextSplit.push({ name: mapping.name, id: mapping.id, series: mapping.series });
           }
         }
       }
@@ -39,7 +39,10 @@ class AboutDrawer extends Component {
         elements.push(
           <a
             key={i}
-            className="changelog-song-name"
+            className={
+              "changelog-song-name" +
+              " " + split.series
+            }
             href={'#' + split.id}
             onClick={() => this.props.toggle()}
           >
