@@ -212,7 +212,7 @@ body {
 .lyrics.line-past.custom-colored {
   /* past custom color, apply effects */
   opacity: 0.5;
-  filter: grayscale(0.5);
+  filter: grayscale(0.3);
 }
 .lyrics.line-active:not(.karaoke) {
   /* non karaoke active - entire line is highlighted and italicized */
@@ -229,6 +229,7 @@ body {
   /* default transition, each syllable has its own rate */
   transition: all 0.7s ease 0s; 
   color: white;
+  filter: drop-shadow(1px 3px 2px #cccccc);
 }
 .lyrics.line-active.active.karaoke {
   /* karaoke active - current and past syllables are highlighted */
@@ -239,6 +240,7 @@ body {
   /* default transition, each syllable has its own rate */
   transition: all 0.2s ease 0s; 
   color: white;
+  filter: drop-shadow(1px 3px 2px #cccccc);
 }
 .lyrics.line-active.future.karaoke {
   /* karaoke active - same as regular future lines */
