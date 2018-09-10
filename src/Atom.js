@@ -37,8 +37,8 @@ class Atom extends PureComponent {
     // whether this atom should apply karaoke past/active effect. relevant for
     // atoms that have a custom color property that cannot use the base color
     // classes
-    const kPast = (this.props.karaoke && lineStatus == "line-active" && status === "past");
-    const kActive = (this.props.karaoke && lineStatus == "line-active" && status === "active");
+    const kPast = (this.props.karaoke && lineStatus === "line-active" && status === "past");
+    const kActive = (this.props.karaoke && lineStatus === "line-active" && status === "active");
 
 
     // transition
@@ -68,8 +68,8 @@ class Atom extends PureComponent {
         textShadow = '0px 0px 6px #' + Atom.darkenColor(this.props.color, 0.5) + ',' +
                      '0px 0px 4px #' + Atom.darkenColor(this.props.color, 0.7);
       } else if (kPast) {
-        textShadow = '0px 0px 4px #' + this.props.color + ',' +
-                     '0px 0px 4px #' + this.props.color;
+        textShadow = '0px 0px 3px #' + this.props.color + ',' +
+                     '0px 0px 3px #' + this.props.color;
       } else if (!this.props.karaoke) {
         textShadow = '0px 0px 3px #' + Atom.lightenColor(this.props.color, 0.6) + ',' +
                      '0px 0px 9px #' + Atom.lightenColor(this.props.color, 0.3);
