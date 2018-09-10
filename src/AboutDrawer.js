@@ -118,6 +118,7 @@ class AboutDrawer extends Component {
               <li><strong>Yunii</strong> for helping with call layout and QC</li>
               <li><strong>Eter</strong> for providing advice on call layout/style</li>
               <li><a href="https://onibe.moe"><strong>Team Onibe</strong></a> for designing the official unofficial Love Live! callguides</li>
+              <li><a href="http://bandori.wikia.com/wiki"><strong>BanG Dream! Wikia</strong></a> for romaji lyrics</li>
               <li><a href="http://bangdream.seesaa.net/"><strong>Bandori! Poppin' Call!</strong></a> for reference BanG Dream callguides</li>
             </ul>
           </div></Tab>
