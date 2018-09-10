@@ -79,8 +79,7 @@ class Column extends PureComponent {
             src={m.src}
             text={m.text}
             type={m.type}
-            color={m.color}
-            shadowColor={m.shadow_color}
+            color={m.color_name}
             karaoke={this.props.karaoke}
             status={status}
             lineStatus={lineStatus}

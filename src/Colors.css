@@ -1,0 +1,102 @@
+/* Custom colors
+ *
+ * How to add a new color:
+ *
+ * 1) Choose base color. Use this for first two rules
+ * 2) Desaturate base for third rule
+ * 3) Brighten and desaturate base for fourth rule
+ * 4) Darken base for fifth rule. Optionally add a drop-shadow for shallow colors
+ * 5) Darken+ base for sixth rule
+ */
+
+
+/******* orange *****/
+
+.lyrics.line-future.color-orange { color: #d66b00; }
+.lyrics.line-active.color-orange { color: #d66b00; }
+.lyrics.line-past.color-orange   { color: #d1a477; }
+.lyrics.line-active.color-orange:not(.karaoke) {
+  text-shadow: 3px 0px 3px #efaa64,
+               0px 3px 3px #efaa64;
+}
+.lyrics.line-active.past.karaoke.color-orange {
+  text-shadow: 0px 0px 4px #bf650b,
+               0px 0px 5px #bf650b;
+  color: white;
+  filter: drop-shadow(1px 3px 2px #cccccc);
+}
+.lyrics.line-active.active.karaoke.color-orange {
+  text-shadow: 0px 0px 6px #914600,
+               0px 0px 4px #914600,
+               0px 0px 4px #914600;
+  color: white;
+  filter: drop-shadow(1px 3px 2px #cccccc);
+}
+
+
+/******* blue *****/
+
+.lyrics.line-future.color-blue { color: #1d60e5; }
+.lyrics.line-active.color-blue { color: #1d60e5; }
+.lyrics.line-past.color-blue   { color: #90b1ed; }
+.lyrics.line-active.color-blue:not(.karaoke) {
+  text-shadow: 3px 0px 3px #87b3ff,
+               0px 3px 3px #87b3ff;
+}
+.lyrics.line-active.past.karaoke.color-blue {
+  text-shadow: 0px 0px 4px #064dc9,
+               0px 0px 5px #064dc9;
+  color: white;
+}
+.lyrics.line-active.active.karaoke.color-blue {
+  text-shadow: 0px 0px 6px #013389,
+               0px 0px 4px #013389,
+               0px 0px 4px #013389;
+  color: white;
+}
+
+
+/******* red *****/
+
+.lyrics.line-future.color-red { color: #e81e1e; }
+.lyrics.line-active.color-red { color: #e81e1e; }
+.lyrics.line-past.color-red   { color: #e29898; }
+.lyrics.line-active.color-red:not(.karaoke) {
+  text-shadow: 3px 0px 3px #ffa0a0,
+               0px 3px 3px #ffa0a0;
+}
+.lyrics.line-active.past.karaoke.color-red {
+  text-shadow: 0px 0px 4px #bf0909,
+               0px 0px 5px #bf0909;
+  color: white;
+}
+.lyrics.line-active.active.karaoke.color-red {
+  text-shadow: 0px 0px 6px #820000,
+               0px 0px 4px #820000,
+               0px 0px 4px #820000;
+  color: white;
+}
+
+
+/******* yellow *****/
+
+.lyrics.line-future.color-yellow { color: #ddbd06; }
+.lyrics.line-active.color-yellow { color: #ddbd06; }
+.lyrics.line-past.color-yellow   { color: #ddce77; }
+.lyrics.line-active.color-yellow:not(.karaoke) {
+  text-shadow: 3px 0px 3px #ffeb93,
+               0px 3px 3px #ffeb93;
+}
+.lyrics.line-active.past.karaoke.color-yellow {
+  text-shadow: 0px 0px 4px #cea70c,
+               0px 0px 5px #cea70c;
+  color: white;
+  filter: drop-shadow(1px 3px 2px #aaaaaa);
+}
+.lyrics.line-active.active.karaoke.color-yellow {
+  text-shadow: 0px 0px 6px #967601,
+               0px 0px 4px #967601,
+               0px 0px 4px #967601;
+  color: white;
+  filter: drop-shadow(1px 1px 2px #cccccc);
+}

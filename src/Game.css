@@ -198,38 +198,24 @@ body {
 
 /******* lyrics *****/
 
-.lyrics {
-  /* base style */
-}
-.lyrics.line-future {
-  /* future color */
-  color: #3d3d3d;
-}
-.lyrics.line-past {
-  /* past color */
-  color: #a5a5a5;
-}
-.lyrics.line-past.custom-colored {
-  /* past custom color, apply effects */
-  opacity: 0.5;
-  filter: grayscale(0.3);
-}
+.lyrics.line-future { color: #3d3d3d; }
+.lyrics.line-active { color: #3d3d3d; }
+.lyrics.line-past   { color: #a5a5a5; }
+
 .lyrics.line-active:not(.karaoke) {
   /* non karaoke active - entire line is highlighted and italicized */
   font-style: italic;
   text-shadow: 3px 0px 3px #c4c4c4,
                0px 3px 3px #c4c4c4;
-  color: black;
 }
 .lyrics.line-active.past.karaoke {
   /* karaoke active - current and past syllables are highlighted */
   font-style: italic;
-  text-shadow: 0px 0px 2px #427dae,
+  text-shadow: 0px 0px 4px #427dae,
                0px 0px 5px #023e70;
   /* default transition, each syllable has its own rate */
   transition: all 0.7s ease 0s; 
   color: white;
-  filter: drop-shadow(1px 3px 2px #cccccc);
 }
 .lyrics.line-active.active.karaoke {
   /* karaoke active - current and past syllables are highlighted */
@@ -240,11 +226,6 @@ body {
   /* default transition, each syllable has its own rate */
   transition: all 0.2s ease 0s; 
   color: white;
-  filter: drop-shadow(1px 3px 2px #cccccc);
-}
-.lyrics.line-active.future.karaoke {
-  /* karaoke active - same as regular future lines */
-  color: #3d3d3d;
 }
 
 /******* calls *****/

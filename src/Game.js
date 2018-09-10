@@ -3,6 +3,7 @@ import AppBar from 'material-ui/AppBar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import './Game.css';
+import './Colors.css';
 
 import seriesThemes from './MuiThemes.js';
 import AboutButton from './AboutButton.js';
