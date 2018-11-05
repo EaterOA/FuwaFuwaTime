@@ -137,7 +137,6 @@ class AssLoader extends Component {
           <AudioPlayer
             elementId='player'
             ref={(element) => {this.player = element}}
-            ogg={null}
             mp3={this.state.mp3}
             defaultVolume={this.defaultVolume}
             onVolumeChange={this.changeVolume}

@@ -60,7 +60,6 @@ class Game extends Component {
       songName: "",
       songId: "",
       settings: this.settingsManager.settings,
-      ogg: null,
       mp3: null,
       left: [],
       right: [],
@@ -161,7 +160,6 @@ class Game extends Component {
           <AudioPlayer
             elementId='player'
             ref={(element) => {this.player = element}}
-            ogg={this.state.ogg}
             mp3={this.state.mp3}
             defaultVolume={this.defaultVolume}
             defaultMuted={this.defaultMuted}
@@ -268,7 +266,6 @@ class Game extends Component {
     this.setState({
       songName: mapping.name,
       songId: mapping.id,
-      ogg: mapping.ogg,
       mp3: mapping.mp3,
       left: mapping.left,
       right: mapping.right,
@@ -378,7 +375,7 @@ class Game extends Component {
       if (prevStatusList.active.indexOf(key) === -1 &&
           (mapping[key].src === 'calls' ||
           mapping[key].src === 'instructions') &&
-          mapping[key].nosfx !== true) {
+          mapping[key].marker !== true) {
         return true;
       }
     }

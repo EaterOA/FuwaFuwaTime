@@ -70,12 +70,15 @@ class Column extends PureComponent {
           <Atom
             key={id+idx}
             jump={
-                  m.end - m.start > 0 ?
-                  () => this.props.jumpTo(m.start) :
-                  null}
+                m.end - m.start > 0 ?
+                () => this.props.jumpTo(m.start) :
+                null}
             selectable={!this.isMobile}
             push={m.push}
-            transition={m.kdur}
+            transition={
+                this.props.karaoke ?
+                m.end - m.start :
+                null}
             src={m.src}
             text={m.text}
             type={m.type}
