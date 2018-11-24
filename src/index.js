@@ -4,11 +4,10 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import Game from './Game.js'
 import AssLoader from './AssLoader.js'
-import { basename } from '../package.json';
 import { unregister } from './registerServiceWorker';
 
 ReactDOM.render(
-  <BrowserRouter basename={basename}>
+  <BrowserRouter>
     <Switch>
 
       <Route path="(.*)?/assloader">

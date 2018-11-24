@@ -16,9 +16,6 @@ import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import seriesThemes from './MuiThemes.js';
 
-import base64 from 'base64-arraybuffer';
-import pako from 'pako';
-
 class AssLoader extends Component {
   constructor(props) {
     super(props);
@@ -328,13 +325,7 @@ class AssLoader extends Component {
           });
           return;
         }
-        const text = JSON.parse(json.data)
-        const data = base64.decode(text)
-        const typedArray = new Uint8Array(data);
-        const inflated = pako.inflate(typedArray);
-        const jsonStr = new TextDecoder("utf-8").decode(inflated);
-        const config = JSON.parse(jsonStr);
-        this.initialize(config[0]);
+        this.initialize(json);
       });
     };
     reader.readAsText(file);

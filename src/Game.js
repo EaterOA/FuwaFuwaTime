@@ -16,10 +16,7 @@ import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
-import base64 from 'base64-arraybuffer';
-import pako from 'pako';
-import stream from './stream.json';
-import key from './key.json';
+import { dataUrl } from '../package.json';
 
 class Game extends Component {
   constructor(props) {
@@ -76,9 +73,6 @@ class Game extends Component {
   };
   onMenuBlur = () => {
     this.disablePlayerControls -= 1;
-  };
-  p = (c, k) => {
-    return c.map((b, idx) => b ^ k[idx*2 % k.length]);
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -224,18 +218,11 @@ class Game extends Component {
     });
   }
   componentDidMount() {
-    if (!stream) {
-      this.initialize([]);
-    } else {
-      const data = base64.decode(stream)
-      const typedArray = new Uint8Array(data);
-      const keyArray = new Uint8Array(base64.decode(key));
-      const dArray = this.p(typedArray, keyArray);
-      const inflated = pako.inflate(dArray);
-      const jsonStr = new TextDecoder("utf-8").decode(inflated);
-      const config = JSON.parse(jsonStr);
-      this.initialize(config);
-    }
+    fetch(dataUrl)
+    .then((res) => { return res.json(); })
+    .then((json) => {
+      this.initialize(json);
+    });
   }
 
   loadSongFromHash(mappings, defaultSongID) {
@@ -466,13 +453,13 @@ class Game extends Component {
     // left - rewind 2 seconds
     } else if (e.keyCode === 37) {
       const seek = Math.max(0, this.player.getCurrentTime() - 2);
-      this.player.jumpTo(seek);
+      this.jumpTo(seek);
       e.preventDefault();
 
     // right - forward 2 seconds
     } else if (e.keyCode === 39) {
       const seek = Math.min(this.player.getDuration(), this.player.getCurrentTime() + 2);
-      this.player.jumpTo(seek);
+      this.jumpTo(seek);
       e.preventDefault();
     }
   }
