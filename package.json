@@ -19,7 +19,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://nanodesu.moe/fuwafuwatime/",
+  "homepage": ".",
   "assCompiler": "https://nanodesu.moe/fuwafuwatime/compile",
   "dataUrl": "./stream.json",
   "browserslist": [
