@@ -21,7 +21,6 @@
   },
   "homepage": ".",
   "assCompiler": "https://nanodesu.moe/fuwafuwatime/compile",
-  "dataUrl": "./stream.json",
   "browserslist": [
     ">0.2%",
     "not dead",

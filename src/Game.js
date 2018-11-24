@@ -16,7 +16,7 @@ import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
 
-import { dataUrl } from '../package.json';
+import stream from './stream.json';
 
 class Game extends Component {
   constructor(props) {
@@ -218,11 +218,7 @@ class Game extends Component {
     });
   }
   componentDidMount() {
-    fetch(dataUrl)
-    .then((res) => { return res.json(); })
-    .then((json) => {
-      this.initialize(json);
-    });
+    this.initialize(stream);
   }
 
   loadSongFromHash(mappings, defaultSongID) {
