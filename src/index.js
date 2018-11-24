@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import Game from './Game.js'
 import AssLoader from './AssLoader.js'
-import { unregister } from './registerServiceWorker';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -22,5 +21,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 );
-
-unregister();
