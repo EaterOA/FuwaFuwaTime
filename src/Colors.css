@@ -1,6 +1,6 @@
 /* Custom colors
  *
- * How to add a new color:
+ * How to add a new lyrics color:
  *
  * 1) Choose base color. Use this for first two rules
  * 2) Desaturate base for third rule
@@ -8,6 +8,23 @@
  * 4) Darken base for fifth rule. Optionally add a drop-shadow for shallow colors
  * 5) Darken+ base for sixth rule
  */
+
+
+/******* kb colors *****/
+
+.color-chika    { color: #F0A20B; }
+.color-you,
+  .color-blue   { color: #49B9F9; }
+.color-riko     { color: #E9A9E8; }
+.color-hanamaru { color: #E6D617; }
+.color-ruby     { color: #FB75E4; }
+.color-yoshiko  { color: #898989; }
+.color-dia      { color: #F23B4C; }
+.color-kanan    { color: #08CC94; }
+.color-mari     { color: #AE58EB; }
+
+.color-sarah    { color: #96c5f7; }
+.color-leah     { color: white; text-shadow: 0px 0px 5px #343434; }
 
 
 /******* orange *****/

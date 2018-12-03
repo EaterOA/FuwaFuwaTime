@@ -81,6 +81,13 @@ class SettingsMenu extends PureComponent {
             }
             onClick={() => {this.props.changeSetting('markers')}}
           />
+          <MenuItem
+            primaryText="Penlight color suggestion"
+            rightIcon={
+              this.props.penlightSuggestion ? <DoneIcon/> : <BlockIcon/>
+            }
+            onClick={() => {this.props.changeSetting('penlightSuggestion')}}
+          />
       </IconMenu>
     );
   }

@@ -15,6 +15,7 @@ import SFXManager from './SFXManager.js';
 import SettingsManager from './SettingsManager.js';
 import AudioPlayer from './AudioPlayer.js';
 import AboutDrawer from './AboutDrawer.js';
+import PenlightSuggestion from './PenlightSuggestion.js';
 
 import stream from './stream.json';
 
@@ -63,6 +64,7 @@ class Game extends Component {
       leftStatusList: this.getStatusList(0, []),
       rightStatusList: this.getStatusList(0, []),
       karaoke: false,
+      penlightSuggestion: null,
     };
     document
       .getElementById('theme-color-tag')
@@ -163,6 +165,10 @@ class Game extends Component {
             onPause={this.onPlayerPause}
             onSeeked={this.onPlayerSeeked}
           />
+          <PenlightSuggestion
+            enable={this.state.settings.penlightSuggestion}
+            suggestion={this.state.penlightSuggestion}
+          />
           <div id="callguide">
             <Column
               id="left"
@@ -255,6 +261,7 @@ class Game extends Component {
       leftStatusList: this.getStatusList(0, mapping.left),
       rightStatusList: this.getStatusList(0, mapping.right),
       karaoke: mapping.karaoke,
+      penlightSuggestion: mapping.penlight,
     });
   }
 

@@ -140,11 +140,7 @@ body {
 #player {
   max-width: 750px;
   width: 100%;
-  margin-bottom: 30px;
-}
-
-#calls-player {
-  display: none;
+  margin-bottom: 20px;
 }
 
 
@@ -153,15 +149,23 @@ body {
  */
 
 #callguide-area {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1em;
   min-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+#penlight-suggestion {
+  color: #333333;
+  margin-bottom: 10px;
+}
+#penlight-suggestion span {
+  font-weight: bold;
+}
+
 #callguide {
-  font-family: 'PT Sans', sans-serif;
-  font-size: 1em;
   max-width: 1250px;
   /* top left/right bottom */
   padding: 15px 5px 50px;

@@ -10,6 +10,7 @@ class SettingsManager {
       karaoke: true,
       markers: true,
       series: 'llss',
+      penlightSuggestion: true,
     };
     this.loadSettings();
     this.changeSetting = this.changeSetting.bind(this);
@@ -68,6 +69,11 @@ class SettingsManager {
     if (seriesSetting != null) {
       this.settings.series = seriesSetting;
     }
+
+    let penlightSuggestionSetting = localStorage.penlightSuggestion;
+    if (penlightSuggestionSetting != null) {
+      this.settings.penlightSuggestion = penlightSuggestionSetting === 'true';
+    }
   }
 
   changeSetting(key, value=null) {
@@ -121,6 +127,12 @@ class SettingsManager {
     } else if (key === 'series') {
       this.settings.series = value;
       localStorage.setItem('series', this.settings.series);
+
+    } else if (key === 'penlightSuggestion') {
+      if (value == null) {
+        this.settings.penlightSuggestion = !this.settings.penlightSuggestion;
+      }
+      localStorage.setItem('penlightSuggestion', this.settings.penlightSuggestion);
 
     } else {
       console.assert(false, 'Unknown settings key ' + key);
