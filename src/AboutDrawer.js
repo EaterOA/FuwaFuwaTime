@@ -110,14 +110,16 @@ class AboutDrawer extends Component {
             <h2>Thanks</h2>
             <ul className="credits-list">
               <li><strong>arbshortcake</strong> for call timing and QC</li>
+              <li><strong>xIceArcher</strong> for karaoke timing, lyrics QC</li>
               <li><strong>ramen</strong> for call research</li>
               <li><strong>Chezz</strong> for lyrics, call timing, and BanG Dream calls</li>
               <li><strong>Ippikiryu</strong> for lyrics QC</li>
-              <li><strong>xIceArcher</strong> for lyrics QC</li>
               <li><strong>Cornsplosion</strong> for lyrics QC</li>
-              <li><strong>Yunii</strong> for helping with call layout and QC</li>
-              <li><strong>Eter</strong> for providing advice on call layout/style</li>
+              <li><strong>Yunii</strong> for call layout advice and QC</li>
+              <li><strong>Eter</strong> for call layout/style advice</li>
+              <li><strong>mr_dr_dj</strong> for song list advice and live info</li>
               <li><a href="https://onibe.moe"><strong>Team Onibe</strong></a> for designing the official unofficial Love Live! callguides</li>
+              <li><a href="https://lovelive.ganbaru.by/"><strong>Love Live! Events Site</strong></a> for reference live info</li>
               <li><a href="http://bandori.wikia.com/wiki"><strong>BanG Dream! Wikia</strong></a> for romaji lyrics</li>
               <li><a href="http://bangdream.seesaa.net/"><strong>Bandori! Poppin' Call!</strong></a> for reference BanG Dream callguides</li>
             </ul>
