@@ -104,7 +104,7 @@ class AboutDrawer extends Component {
             <h2>Known issues</h2>
             <p>On desktop, switching to a different tab may cause SFX to become delayed</p>
             <p>On mobile, SFX may not play or may play with a ~150ms delay</p>
-            <p><em>Missing songs (30)</em>: Aqours HEROES, Todokanai Hoshi da to Shitemo, Humming Friend, Yume de Yozora o Terashitai, Pops Heart de Odorun damon, Sora mo Kokoro mo Hareru kara, Guilty Eyes Fever, Sky Journey, Landing Action Yeah!!, summer songs x 4, Kimi no Hitomi o Meguru Bouken, "MY LIST" to you, solo songs x 9, Sakura Bye Bye, Sotsugyou Desu ne, Guilty!? Farewell Party, Hajimari Road, Yosoku Fukanou Driving, Marine Border Parasol</p>
+            <p><em>Missing songs (21)</em>: Aqours HEROES, Todokanai Hoshi da to Shitemo, Humming Friend, Yume de Yozora o Terashitai, Pops Heart de Odorun damon, Sora mo Kokoro mo Hareru kara, Guilty Eyes Fever, Landing Action Yeah!!, summer songs x 4, solo songs x 9</p>
             <h2>Contact</h2>
             <p>Direct all bug reports, questions, concerns, and complaints to <a href="https://www.reddit.com/user/gacha4life/"><strong>gacha4life</strong></a></p>
             <p>You can also submit anonymous feedback through <a href="https://goo.gl/forms/lytAFNDustx5ZswF2">this survey</a></p>
@@ -130,6 +130,7 @@ class AboutDrawer extends Component {
             <h2>PDF callguides</h2>
             <p>The lyrics/calls defined in FuwaFuwaTime are used to generate these PDF callguides (A5 size):</p>
             <ul className='pdf-list'>
+              <li><a href="pdf/5th_live_a5.pdf">Aqours 5th Love Live</a></li>
               <li><a href="pdf/4th_live_a5.pdf">Aqours 4th Love Live</a></li>
               <li><a href="pdf/3rd_live_a5.pdf">Aqours 3rd Love Live tour main setlist</a></li>
               <li><a href="pdf/hakodate_d2_a5.pdf">Hakodate Unit Carnival day 2 setlist</a></li>
