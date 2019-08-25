@@ -42,6 +42,13 @@ class Atom extends PureComponent {
                  + ', color ' + (this.props.transition / 1.5)  + 's';
     }
 
+    // Transform links
+    let ele = this.props.text;
+    if (this.props.src === "notes" &&
+        this.props.text.startsWith("http")) {
+      ele = (<a href={this.props.text}>{this.props.text}</a>)
+    }
+
     return (
       <div
         onClick={this.props.jump}
@@ -59,7 +66,7 @@ class Atom extends PureComponent {
           display: (this.props.hidden ? 'none' : null),
         }}
         >
-          {this.props.text}
+          {ele}
       </div>
     )
   }
